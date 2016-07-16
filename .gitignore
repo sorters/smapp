@@ -14,3 +14,4 @@ bootstrap/cache/
 
 .idea
 
+/database/database.sqlite
