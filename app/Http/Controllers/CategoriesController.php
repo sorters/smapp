@@ -21,6 +21,7 @@ class CategoriesController extends Controller
         $category->save();
 
         return \Response::json(array(
+                'id' => $category->id,
                 'errors' => false,
             ),
             200

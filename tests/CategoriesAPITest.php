@@ -22,6 +22,7 @@ class CategoriesAPITest extends TestCase
     {
         $this->post(self::$baseURL.'/categories',
                     ['name' => 'testCategory', 'description' => 'descriptive test description']
-        )->seeJson(['errors' => false]);
+        )->seeJson(['errors' => false])
+         ->ass;
     }
 }
