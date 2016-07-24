@@ -15,3 +15,5 @@ bootstrap/cache/
 .idea
 
 /database/database.sqlite
+
+tests/_output/*
