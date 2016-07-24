@@ -19,8 +19,21 @@ class CategoriesController extends Controller
         $category->name = \Request::get('name');
         $category->description = \Request::get('description');
         \Log::info('About to save a category...');
-        $category->save();
-        \Log::info('Saved a category with id = '.$category->id);
+
+        if ($category->save()) {
+            \Log::info('Saved a category with id = '.$category->id);
+        } else {
+            \Log::info('Se desarmó alguna wea');
+        }
+
+        $category_saved = Category::find($category->id);
+        \Log::info('Retrieved category '.$category_saved);
+
+        \Log::info('.');
+        \Log::info('Created: ' . $category);
+
+        \Log::info('.');
+        \Log::info('Retrieved: ' . $category_saved);
 
         return \Response::json(array(
                 'id' => $category->id,
