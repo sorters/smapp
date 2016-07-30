@@ -4,5 +4,6 @@ modules:
         - \Helper\Api
         - Db
         - REST:
-            url: /api/v1
-            depends: Laravel5
+            url: http://localhost:8000/api/v1
+            depends: PhpBrowser
+            part: Json

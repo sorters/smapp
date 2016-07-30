@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Category;
-use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
@@ -14,26 +13,22 @@ class CategoriesController extends Controller
         return \Response::json($categories);
     }
 
-    public function store() {
-        $category = new Category;
-        $category->name = \Request::get('name');
-        $category->description = \Request::get('description');
-        \Log::info('About to save a category...');
+    public function find($id) {
+        $category = Category::find($id);
+        return \Response::json($category);
+    }
 
-        if ($category->save()) {
-            \Log::info('Saved a category with id = '.$category->id);
+    public function store() {
+        if (\Request::has('id')) {
+            $category = Category::firstOrNew(['id' => \Request::get('id')]);
         } else {
-            \Log::info('Se desarmó alguna wea');
+            $category = new Category();
         }
 
-        $category_saved = Category::find($category->id);
-        \Log::info('Retrieved category '.$category_saved);
+        $category->name = \Request::get('name');
+        $category->description = \Request::get('description');
 
-        \Log::info('.');
-        \Log::info('Created: ' . $category);
-
-        \Log::info('.');
-        \Log::info('Retrieved: ' . $category_saved);
+        $category->save();
 
         return \Response::json(array(
                 'id' => $category->id,
