@@ -12,6 +12,10 @@ Route::group(['prefix' => 'api/v1'], function()
     Route::post('products', 'ProductsController@store');
     Route::delete('products/{id}', 'ProductsController@delete');
 
+    // Stocks
+    Route::post('products/{id}/refill/{quantity}', 'StocksController@refill');
+    Route::post('products/{id}/remove/{quantity}', 'StocksController@remove');
+
     // Categories
     Route::get('categories', 'CategoriesController@index');
     Route::get('categories/{id}', 'CategoriesController@find');

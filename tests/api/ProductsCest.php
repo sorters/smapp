@@ -115,6 +115,70 @@ class ProductsCest
         $I->haveInDatabase('products', $sampleProduct);
         $I->sendDELETE('/products/'.$productId, []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContains('"errors":false');
         $I->dontSeeInDatabase('products', $sampleProduct);
+    }
+
+    public function SetProductStockTest(ApiTester $I)
+    {
+        $productId = '1';
+        $quantity = 100;
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+
+        $sampleStock = array('product_id' => $productId, 'quantity' => $quantity);
+
+        $I->wantTo('set the stock for a product via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        $I->dontSeeInDatabase('stocks', array('product_id' => $productId));
+        $I->sendPOST('/products/'.$productId.'/refill/'.$quantity, []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $quantity));
+        $I->seeInDatabase('stocks', $sampleStock);
+    }
+
+    public function IncrementProductStockTest(ApiTester $I)
+    {
+        $productId = '1';
+        $currentQuantity = 100;
+        $quantityToAdd = 10;
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+
+        $sampleStock = array('product_id' => $productId, 'quantity' => $currentQuantity);
+
+        $I->wantTo('increment the stock for a product via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        $I->haveInDatabase('stocks', $sampleStock);
+        $I->sendPOST('/products/'.$productId.'/refill/'.$quantityToAdd, []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $currentQuantity + $quantityToAdd));
+        $I->seeInDatabase('stocks', array('product_id' => $productId, 'quantity' => $currentQuantity + $quantityToAdd));
+    }
+
+    public function DecrementProductStockTest(ApiTester $I)
+    {
+        $productId = '1';
+        $currentQuantity = 100;
+        $quantityToRemove = 10;
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+
+        $sampleStock = array('product_id' => $productId, 'quantity' => $currentQuantity);
+
+        $I->wantTo('decrement the stock for a product via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        $I->haveInDatabase('stocks', $sampleStock);
+        $I->sendPOST('/products/'.$productId.'/remove/'.$quantityToRemove, []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $currentQuantity - $quantityToRemove));
+        $I->seeInDatabase('stocks', array('product_id' => $productId, 'quantity' => $currentQuantity - $quantityToRemove));
     }
 }
