@@ -24,6 +24,7 @@ class CategoriesCest
         foreach($sampleCategories as $sampleCategory) {
             $I->haveInDatabase('categories', $sampleCategory);
         }
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendGET('/categories', []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -37,6 +38,7 @@ class CategoriesCest
 
         $I->wantTo('retrieve a category via API');
         $I->haveInDatabase('categories', $sampleCategory);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendGET('/categories/'.$sampleCategoryId, []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -48,6 +50,7 @@ class CategoriesCest
         $sampleCategory = array('name' => 'category', 'description' => 'a test category description');
 
         $I->wantTo('create a category via API');
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendPOST('/categories', $sampleCategory);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -63,6 +66,7 @@ class CategoriesCest
 
         $I->wantTo('update and existing category via API');
         $I->haveInDatabase('categories', $sampleCategory);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendPOST('/categories', $sampleUpdatedCategory);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -77,6 +81,7 @@ class CategoriesCest
 
         $I->wantTo('delete a category via API');
         $I->haveInDatabase('categories', $sampleCategory);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendDELETE('/categories/'.$sampleCategoryId, []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->dontSeeInDatabase('categories', $sampleCategory);

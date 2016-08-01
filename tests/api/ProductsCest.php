@@ -38,6 +38,7 @@ class ProductsCest
         foreach($sampleProducts as $sampleProduct) {
             $I->haveInDatabase('products', $sampleProduct);
         }
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendGET('/products', []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -57,6 +58,7 @@ class ProductsCest
         $I->wantTo('retrieve one product via API');
         $I->haveInDatabase('categories', $sampleCategory);
         $I->haveInDatabase('products', $sampleProduct);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendGET('/products/'.$productId, []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -74,6 +76,7 @@ class ProductsCest
 
         $I->wantTo('create a product via API');
         $I->haveInDatabase('categories', $sampleCategory);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendPOST('/products', $sampleProduct);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -93,6 +96,7 @@ class ProductsCest
 
         $I->wantTo('update a product via API');
         $I->haveInDatabase('categories', $sampleCategory);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendPOST('/products', $sampleProduct);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -113,6 +117,7 @@ class ProductsCest
         $I->wantTo('delete a product via API');
         $I->haveInDatabase('categories', $sampleCategory);
         $I->haveInDatabase('products', $sampleProduct);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendDELETE('/products/'.$productId, []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -133,6 +138,7 @@ class ProductsCest
         $I->wantTo('set the stock for a product via API');
         $I->haveInDatabase('products', $sampleProduct);
         $I->dontSeeInDatabase('stocks', array('product_id' => $productId));
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendPOST('/products/'.$productId.'/refill/'.$quantity, []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -140,7 +146,7 @@ class ProductsCest
         $I->seeInDatabase('stocks', $sampleStock);
     }
 
-    public function IncrementProductStockTest(ApiTester $I)
+    public function IncrementProductStockTest(ApiTester $I, \Codeception\Scenario $scenario)
     {
         $productId = '1';
         $currentQuantity = 100;
@@ -154,6 +160,7 @@ class ProductsCest
         $I->wantTo('increment the stock for a product via API');
         $I->haveInDatabase('products', $sampleProduct);
         $I->haveInDatabase('stocks', $sampleStock);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendPOST('/products/'.$productId.'/refill/'.$quantityToAdd, []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
@@ -175,6 +182,7 @@ class ProductsCest
         $I->wantTo('decrement the stock for a product via API');
         $I->haveInDatabase('products', $sampleProduct);
         $I->haveInDatabase('stocks', $sampleStock);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendPOST('/products/'.$productId.'/remove/'.$quantityToRemove, []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
