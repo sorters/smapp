@@ -46,4 +46,18 @@ class CategoriesController extends Controller
             200
         );
     }
+
+    public function products($idCategory) {
+        $category = Category::findOrFail($idCategory);
+        if ($category !== NULL) {
+            return \Response::json($category->products);
+        } else {
+            return \Response::json(array(
+                'id' => $category->id,
+                'errors' => true,
+            ),
+                404
+            );
+        }
+    }
 }

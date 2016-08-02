@@ -53,4 +53,23 @@ class ProductsController extends Controller
             200
         );
     }
+
+    public function setCategory($idCategory) {
+        $productIDs = explode(',', \Request::get('products'));
+
+        \Log::info($productIDs);
+        \Log::info('------reswgsgreg----------------------------sergerg----------------------------');
+
+        foreach($productIDs as $id) {
+            $product = Product::find($id);
+            $product->category_id = $idCategory;
+            $product->save();
+        }
+
+        return \Response::json(array(
+            'errors' => false,
+        ),
+            200
+        );
+    }
 }

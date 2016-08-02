@@ -21,6 +21,11 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
     Route::get('categories/{id}', 'CategoriesController@find');
     Route::post('categories', 'CategoriesController@store');
     Route::delete('categories/{id}', 'CategoriesController@delete');
+
+    // CategoryProducts
+    Route::get('categories/{idCategory}/products', 'CategoriesController@products');
+    Route::post('categories/{idCategory}/products', 'ProductsController@setCategory');
+    //Route::delete('categories/{idCategory}/products', 'ProductsController@unsetCategory');
 });
 
 //Route::auth();

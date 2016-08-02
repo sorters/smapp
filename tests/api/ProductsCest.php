@@ -189,4 +189,26 @@ class ProductsCest
         $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $currentQuantity - $quantityToRemove));
         $I->seeInDatabase('stocks', array('product_id' => $productId, 'quantity' => $currentQuantity - $quantityToRemove));
     }
+
+    public function DecrementProductStockBelowZeroTest(ApiTester $I)
+    {
+        $productId = '1';
+        $currentQuantity = 10;
+        $quantityToRemove = 100;
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+
+        $sampleStock = array('product_id' => $productId, 'quantity' => $currentQuantity);
+
+        $I->wantTo('decrement the stock below zero for a product via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        $I->haveInDatabase('stocks', $sampleStock);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendPOST('/products/'.$productId.'/remove/'.$quantityToRemove, []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST); // 400
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(array("errors" => true, "product_id" => $productId));
+    }
+
 }
