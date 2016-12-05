@@ -2,7 +2,7 @@
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('auth');
 
 Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
 {
@@ -25,9 +25,8 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
     // CategoryProducts
     Route::get('categories/{idCategory}/products', 'CategoriesController@products');
     Route::post('categories/{idCategory}/products', 'ProductsController@setCategory');
-    //Route::delete('categories/{idCategory}/products', 'ProductsController@unsetCategory');
 });
 
-//Route::auth();
+Route::auth();
 
 //Route::get('/home', 'HomeController@index');

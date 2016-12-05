@@ -33,12 +33,19 @@
             .title {
                 font-size: 96px;
             }
+
+            .data {
+                font-size: 36px;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="content">
                 <div class="title">Smapp</div>
+                <div class="data">Name : {{ Auth::user()->name }}</div>
+                <div class="data">API Token : {{ Auth::user()->api_token }}</div>
+                <div class="data"><a href="{{ url('logout') }}">Sign Out</a></div>
             </div>
         </div>
     </body>
