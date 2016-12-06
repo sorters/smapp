@@ -15,6 +15,11 @@ class CategoriesController extends Controller
 
     public function find($id) {
         $category = Category::find($id);
+
+        if (empty($category)) {
+            return response("404: Category not found: $id", 404);
+        }
+
         return \Response::json($category);
     }
 
@@ -28,7 +33,11 @@ class CategoriesController extends Controller
         $category->name = \Request::get('name');
         $category->description = \Request::get('description');
 
-        $category->save();
+        try {
+            $category->save();
+        } catch (QueryException $e) {
+            return response('400: Bad request', 400);
+        }
 
         return \Response::json(array(
                 'id' => $category->id,
@@ -39,7 +48,9 @@ class CategoriesController extends Controller
     }
 
     public function delete($id) {
-        Category::destroy($id);
+        if (!Category::destroy($id)) {
+            return response("404: Category not found: $id", 404);
+        }
         return \Response::json(array(
                 'errors' => false,
             ),
@@ -49,6 +60,11 @@ class CategoriesController extends Controller
 
     public function products($idCategory) {
         $category = Category::findOrFail($idCategory);
+
+        if (empty($category)) {
+            return response("404: Category not found: $idCategory", 404);
+        }
+
         if ($category !== NULL) {
             return \Response::json($category->products);
         } else {

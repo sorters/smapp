@@ -27,6 +27,10 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
     Route::post('categories/{idCategory}/products', 'ProductsController@setCategory');
 });
 
-Route::auth();
+$this->get('login', 'Auth\AuthController@showLoginForm');
+$this->post('login', 'Auth\AuthController@login');
+$this->get('logout', 'Auth\AuthController@logout');
+
+//Route::auth();
 
 //Route::get('/home', 'HomeController@index');

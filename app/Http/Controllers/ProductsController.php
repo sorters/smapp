@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Product;
 
 use App\Http\Requests;
+use Illuminate\Database\QueryException;
+use Mockery\CountValidator\Exception;
 
 class ProductsController extends Controller
 {
@@ -17,6 +20,11 @@ class ProductsController extends Controller
     public function find($id)
     {
         $product = Product::find($id);
+
+        if (empty($product)) {
+            return response("404: Product not found: $id", 404);
+        }
+
         return \Response::json($product);
     }
 
@@ -34,7 +42,11 @@ class ProductsController extends Controller
         $product->buy_price = \Request::get('buy_price');
         $product->sell_price = \Request::get('sell_price');
 
-        $product->save();
+        try {
+            $product->save();
+        } catch (QueryException $e) {
+            return response('400: Bad request', 400);
+        }
 
         return \Response::json(array(
             'id' => $product->id,
@@ -46,7 +58,10 @@ class ProductsController extends Controller
 
     public function delete($id)
     {
-        Product::destroy($id);
+        if (!Product::destroy($id))
+        {
+            return response("404: Product not found: $id", 404);
+        }
         return \Response::json(array(
             'errors' => false,
         ),
@@ -54,14 +69,20 @@ class ProductsController extends Controller
         );
     }
 
-    public function setCategory($idCategory) {
+    public function setCategory($idCategory)
+    {
         $productIDs = explode(',', \Request::get('products'));
 
-        \Log::info($productIDs);
-        \Log::info('------reswgsgreg----------------------------sergerg----------------------------');
+        $category = Category::find($idCategory);
+        if (empty($category)) {
+            return response("404: Category not found: $idCategory", 404);
+        }
 
-        foreach($productIDs as $id) {
+        foreach ($productIDs as $id) {
             $product = Product::find($id);
+            if (empty($product)) {
+                return response("404: Product not found: $id", 404);
+            }
             $product->category_id = $idCategory;
             $product->save();
         }

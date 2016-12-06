@@ -207,8 +207,6 @@ class ProductsCest
         $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendPOST('/products/'.$productId.'/remove/'.$quantityToRemove, []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST); // 400
-        $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(array("errors" => true, "product_id" => $productId));
     }
 
 }
