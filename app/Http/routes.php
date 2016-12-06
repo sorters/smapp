@@ -4,6 +4,10 @@ Route::get('/', function () {
     return view('welcome');
 })->middleware('auth');
 
+Route::get('/docs', function() {
+    return response()->file('../docs/smapp.html');
+});
+
 Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
 {
     // Products
