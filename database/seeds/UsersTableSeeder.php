@@ -15,7 +15,7 @@ class UsersTableSeeder extends Seeder
             'id' => 1,
             'name' => 'Admin',
             'email' => 'admin@sorters.io',
-            'api_token' => 'IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY',
+            'api_token' => str_random(60),
             'password' => '$2y$10$zi7VUnFmoFRINXQdNLEgzuEr6hiQuVb6TcyU80POAgNV1W24jTEcK',
             'created_at' => null,
             'updated_at' => null,
