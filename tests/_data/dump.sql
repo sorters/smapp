@@ -6,6 +6,8 @@ INSERT INTO "users" (id,name,email,api_token,password,remember_token,created_at,
 CREATE TABLE "stocks" ("id" integer not null primary key autoincrement, "product_id" integer not null, "quantity" float not null default '0', "created_at" datetime null, "updated_at" datetime null, foreign key("product_id") references "products"("id"));
 CREATE TABLE "products" ("id" integer not null primary key autoincrement, "name" varchar not null, "category_id" integer null, "description" varchar not null, "created_at" datetime null, "updated_at" datetime null, foreign key("category_id") references "categories"("id"));
 CREATE TABLE "categories" ("id" integer not null primary key autoincrement, "name" varchar not null, "description" varchar not null, "created_at" datetime null, "updated_at" datetime null);
+CREATE TABLE "tags" ("id" integer not null primary key autoincrement, "name" varchar not null, "created_at" datetime null, "updated_at" datetime null);
+CREATE TABLE "product_tag" ("id" integer not null primary key autoincrement, "product_id" integer not null, "tag_id" integer not null, "created_at" datetime null, "updated_at" datetime null, foreign key("product_id") references "products"("id"), foreign key("tag_id") references "tags"("id"));
 CREATE UNIQUE INDEX "users_email_unique" on "users" ("email");
 CREATE UNIQUE INDEX "products_name_unique" on "products" ("name");
 CREATE UNIQUE INDEX "categories_name_unique" on "categories" ("name");

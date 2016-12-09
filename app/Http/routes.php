@@ -31,6 +31,10 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
     // CategoryProducts
     Route::get('categories/{idCategory}/products', 'CategoriesController@products');
     Route::post('categories/{idCategory}/products', 'ProductsController@setCategory');
+
+    // Tags
+    Route::post('products/{idProduct}/tag', 'ProductsController@tag');
+    Route::post('products/{idProduct}/untag', 'ProductsController@untag');
 });
 
 $this->get('login', 'Auth\AuthController@showLoginForm');

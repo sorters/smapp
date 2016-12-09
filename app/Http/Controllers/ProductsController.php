@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Product;
 
+use App\Tag;
 use Illuminate\Database\QueryException;
 
 class ProductsController extends Controller
@@ -114,4 +115,51 @@ class ProductsController extends Controller
         );
 
     }
+
+    public function tag($id)
+    {
+        $product = Product::find($id);
+
+        if (empty($product)) {
+            return response("404: Product not found: $id", 404);
+        }
+
+        $tag = Tag::firstOrNew(['name' => \Request::get('tag')]);
+        $tag->save();
+        $tagId = $tag->id;
+        $product->tags()->sync([$tagId], false);
+
+        return \Response::json(array(
+            'errors' => false,
+        ),
+            200
+        );
+
+    }
+
+    public function untag($id)
+    {
+        $product = Product::find($id);
+
+        if (empty($product)) {
+            return response("404: Product not found: $id", 404);
+        }
+
+        $tagName = \Request::get('tag');
+        $tag = Tag::where('name', $tagName)->first();
+
+        if (empty($tag)) {
+            return response("404: Tag not found: $tagName", 404);
+        }
+
+        $product->tags()->detach([$tag['id']], false);
+
+        return \Response::json(array(
+            'errors' => false,
+        ),
+            200
+        );
+
+    }
+
 }

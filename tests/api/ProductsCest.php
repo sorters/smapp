@@ -249,4 +249,61 @@ class ProductsCest
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST); // 400
     }
 
+    public function AddTagToProductTest(ApiTester $I)
+    {
+        $productId = '1';
+        $expectedTagId = '1';
+
+        $sampleTagName = 'sampleTag';
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1');
+
+        $sampleTagBody = array('tag' => $sampleTagName);
+        $expectedTag = array('id' => $expectedTagId, 'name' => $sampleTagName);
+
+        $I->wantTo('add a tag to a product via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendPOST('/products/'.$productId.'/tag', $sampleTagBody);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeInDatabase('tags', $expectedTag);
+        $I->seeInDatabase('product_tag', array('product_id' => $productId, 'tag_id' => $expectedTagId));
+    }
+
+    public function RemoveTagFromProductTest(ApiTester $I)
+    {
+        $productId = '1';
+        $sampleTagId1 = '1';
+        $sampleTagId2 = '2';
+
+        $sampleTagName1 = 'sampleTag1';
+        $sampleTagName2 = 'sampleTag2';
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1');
+
+        $sampleTagBody = array('tag' => $sampleTagName1);
+
+        $expectedTagsAlways = array(
+            array('id' => $sampleTagId1, 'name' => $sampleTagName1),
+            array('id' => $sampleTagId2, 'name' => $sampleTagName2),
+        );
+
+        $I->wantTo('remove a tag from a product via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        foreach($expectedTagsAlways as $expectedTag) {
+            $I->haveInDatabase('tags', $expectedTag);
+            $I->haveInDatabase('product_tag', array('tag_id' => $expectedTag['id'], 'product_id' => $sampleProduct['id']));
+        }
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendPOST('/products/'.$productId.'/untag', $sampleTagBody);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        foreach($expectedTagsAlways as $expectedTag) {
+            $I->seeInDatabase('tags', $expectedTag);
+        }
+        $I->seeInDatabase('product_tag', array('product_id' => $productId, 'tag_id' => $sampleTagId2));
+        $I->dontSeeInDatabase('product_tag', array('product_id' => $productId, 'tag_id' => $sampleTagId1));
+    }
+
 }
