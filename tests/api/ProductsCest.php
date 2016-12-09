@@ -24,11 +24,11 @@ class ProductsCest
 
         $sampleProducts = array(
             array('id' => '1', 'name' => 'product1', 'category_id' => $categoryId1,
-                  'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99'),
+                  'description' => 'a test product description for 1'),
             array('id' => '2', 'name' => 'product2', 'category_id' => $categoryId1,
-                'description' => 'a test product description for 2', 'buy_price' => '100.0', 'sell_price' => '149.99'),
+                'description' => 'a test product description for 2'),
             array('id' => '3', 'name' => 'product3', 'category_id' => $categoryId2,
-                'description' => 'a test product description for 3', 'buy_price' => '1.0', 'sell_price' => '2.5'),
+                'description' => 'a test product description for 3'),
         );
 
         $I->wantTo('retrieve all the products via API');
@@ -53,7 +53,7 @@ class ProductsCest
         $sampleCategory = array('id' => $categoryId, 'name' => 'category1', 'description' => 'a test category description for 1');
 
         $sampleProduct = array('id' => $productId, 'name' => 'product1', 'category_id' => $categoryId,
-                'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+                'description' => 'a test product description for 1');
 
         $I->wantTo('retrieve one product via API');
         $I->haveInDatabase('categories', $sampleCategory);
@@ -72,7 +72,7 @@ class ProductsCest
         $sampleCategory = array('id' => $categoryId, 'name' => 'category1', 'description' => 'a test category description for 1');
 
         $sampleProduct = array('name' => 'product1', 'category_id' => $categoryId,
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
 
         $I->wantTo('create a product via API');
         $I->haveInDatabase('categories', $sampleCategory);
@@ -92,7 +92,7 @@ class ProductsCest
         $sampleCategory = array('id' => $categoryId, 'name' => 'category1', 'description' => 'a test category description for 1');
 
         $sampleProduct = array('id' => $productId, 'name' => 'product1', 'category_id' => $categoryId,
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
 
         $I->wantTo('update a product via API');
         $I->haveInDatabase('categories', $sampleCategory);
@@ -112,7 +112,7 @@ class ProductsCest
         $sampleCategory = array('id' => $categoryId, 'name' => 'category1', 'description' => 'a test category description for 1');
 
         $sampleProduct = array('id' => $productId, 'name' => 'product1', 'category_id' => $categoryId,
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
 
         $I->wantTo('delete a product via API');
         $I->haveInDatabase('categories', $sampleCategory);
@@ -128,10 +128,10 @@ class ProductsCest
     public function SetProductStockTest(ApiTester $I)
     {
         $productId = '1';
-        $quantity = 100;
+        $quantity = number_format(100.0, 2);
 
         $sampleProduct = array('id' => $productId, 'name' => 'product1',
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
 
         $sampleStock = array('product_id' => $productId, 'quantity' => $quantity);
 
@@ -146,14 +146,52 @@ class ProductsCest
         $I->seeInDatabase('stocks', $sampleStock);
     }
 
+    public function GetProductStock(ApiTester $I)
+    {
+        $productId = '1';
+        $currentQuantity = number_format(100.0, 2);
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1');
+
+        $sampleStock = array('product_id' => $productId, 'quantity' => $currentQuantity);
+
+        $I->wantTo('check the stock of a product via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        $I->haveInDatabase('stocks', $sampleStock);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendGET('/products/'.$productId.'/stock', []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $currentQuantity));
+    }
+
+    public function Get0AsStockForProductWithNoStock(ApiTester $I) {
+        $productId = '1';
+        $expectedQuantity = number_format(0.0, 2);
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1');
+
+        $I->wantTo('check that I get 0 for a stock of a product that has no stock via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendGET('/products/'.$productId.'/stock', []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $expectedQuantity));
+    }
+
     public function IncrementProductStockTest(ApiTester $I, \Codeception\Scenario $scenario)
     {
         $productId = '1';
-        $currentQuantity = 100;
+        $currentQuantity = number_format(100.0, 2);
         $quantityToAdd = 10;
 
+        $expectedQuantity = number_format($currentQuantity + $quantityToAdd, 2);
+
         $sampleProduct = array('id' => $productId, 'name' => 'product1',
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
 
         $sampleStock = array('product_id' => $productId, 'quantity' => $currentQuantity);
 
@@ -164,18 +202,20 @@ class ProductsCest
         $I->sendPOST('/products/'.$productId.'/refill/'.$quantityToAdd, []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $currentQuantity + $quantityToAdd));
-        $I->seeInDatabase('stocks', array('product_id' => $productId, 'quantity' => $currentQuantity + $quantityToAdd));
+        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $expectedQuantity));
+        $I->seeInDatabase('stocks', array('product_id' => $productId, 'quantity' => $expectedQuantity));
     }
 
     public function DecrementProductStockTest(ApiTester $I)
     {
         $productId = '1';
-        $currentQuantity = 100;
+        $currentQuantity = 100.0;
         $quantityToRemove = 10;
 
+        $expectedQuantity = number_format($currentQuantity - $quantityToRemove, 2);
+
         $sampleProduct = array('id' => $productId, 'name' => 'product1',
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
 
         $sampleStock = array('product_id' => $productId, 'quantity' => $currentQuantity);
 
@@ -186,8 +226,8 @@ class ProductsCest
         $I->sendPOST('/products/'.$productId.'/remove/'.$quantityToRemove, []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $currentQuantity - $quantityToRemove));
-        $I->seeInDatabase('stocks', array('product_id' => $productId, 'quantity' => $currentQuantity - $quantityToRemove));
+        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $expectedQuantity));
+        $I->seeInDatabase('stocks', array('product_id' => $productId, 'quantity' => $expectedQuantity));
     }
 
     public function DecrementProductStockBelowZeroTest(ApiTester $I)
@@ -197,7 +237,7 @@ class ProductsCest
         $quantityToRemove = 100;
 
         $sampleProduct = array('id' => $productId, 'name' => 'product1',
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
 
         $sampleStock = array('product_id' => $productId, 'quantity' => $currentQuantity);
 

@@ -10,4 +10,9 @@ class Stock extends Model
     protected $fillable = [
         'product_id', 'quantity',
     ];
+
+    public function getQuantityAttribute($value)
+    {
+        return number_format($value, 2);
+    }
 }

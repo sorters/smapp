@@ -24,17 +24,17 @@ class CategoryProductsCest
 
         $sampleProductsIn = array(
             array('id' => '1', 'name' => 'product1', 'category_id' => $categoryId1,
-                'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99'),
+                'description' => 'a test product description for 1'),
             array('id' => '2', 'name' => 'product2', 'category_id' => $categoryId1,
-                'description' => 'a test product description for 2', 'buy_price' => '100.0', 'sell_price' => '149.99'),
+                'description' => 'a test product description for 2'),
             array('id' => '3', 'name' => 'product3', 'category_id' => $categoryId1,
-                'description' => 'a test product description for 3', 'buy_price' => '1.0', 'sell_price' => '2.5'),
+                'description' => 'a test product description for 3'),
         );
         $sampleProductsOut = array(
             array('id' => '4', 'name' => 'product4', 'category_id' => $categoryId2,
-                'description' => 'a test product description for 4', 'buy_price' => '10.0', 'sell_price' => '14.99'),
+                'description' => 'a test product description for 4'),
             array('id' => '5', 'name' => 'product5', 'category_id' => $categoryId2,
-                'description' => 'a test product description for 5', 'buy_price' => '100.0', 'sell_price' => '149.99'),
+                'description' => 'a test product description for 5'),
         );
 
         $I->wantTo('retrieve all the products of a category via API');
@@ -62,9 +62,9 @@ class CategoryProductsCest
         $sampleCategory = array('id' => $categoryId, 'name' => 'category1', 'description' => 'a test category description for 1');
 
         $sampleProductBefore = array('id' => $productId, 'name' => 'product1',
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
         $sampleProductAfter = array('id' => $productId, 'name' => 'product1', 'category_id' => $categoryId,
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
 
         $I->wantTo('set the category of a product via API');
         $I->haveInDatabase('categories', $sampleCategory);
@@ -83,16 +83,16 @@ class CategoryProductsCest
         $sampleCategory = array('id' => $categoryId, 'name' => 'category1', 'description' => 'a test category description for 1');
 
         $sampleProduct1Before = array('id' => $productId1, 'name' => 'product1',
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
         $sampleProduct1After = array('id' => $productId1, 'name' => 'product1', 'category_id' => $categoryId,
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
 
         $sampleProduct2Before = array('id' => $productId2, 'name' => 'product2',
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
         $sampleProduct2After = array('id' => $productId2, 'name' => 'product2', 'category_id' => $categoryId,
-            'description' => 'a test product description for 1', 'buy_price' => '10.0', 'sell_price' => '14.99');
+            'description' => 'a test product description for 1');
 
-        $I->wantTo('set the category of a product via API');
+        $I->wantTo('set the category of many products via API');
         $I->haveInDatabase('categories', $sampleCategory);
         $I->haveInDatabase('products', $sampleProduct1Before);
         $I->haveInDatabase('products', $sampleProduct2Before);

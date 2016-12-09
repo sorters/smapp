@@ -5,10 +5,16 @@ namespace App\Http\Controllers;
 use App\Product;
 use App\Stock;
 
-use App\Http\Requests;
-
 class StocksController extends Controller
 {
+
+    const DECIMALS = 2;
+
+    public function index() {
+        $stocks = Stock::all();
+        return \Response::json($stocks);
+    }
+
     public function refill($product_id, $quantity)
     {
         if (!Product::find($product_id)) {
@@ -21,7 +27,7 @@ class StocksController extends Controller
 
         return \Response::json(array(
             'product_id' => $stock->product_id,
-            'quantity' => $stock->quantity,
+            'quantity' => number_format($stock->quantity, self::DECIMALS),
             'errors' => false,
         ),
             200
@@ -45,7 +51,7 @@ class StocksController extends Controller
 
             return \Response::json(array(
                 'product_id' => $stock->product_id,
-                'quantity' => $stock->quantity,
+                'quantity' => number_format($stock->quantity, self::DECIMALS),
                 'errors' => false,
             ),
                 200

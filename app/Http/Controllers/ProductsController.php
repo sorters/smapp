@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Product;
 
-use App\Http\Requests;
 use Illuminate\Database\QueryException;
-use Mockery\CountValidator\Exception;
 
 class ProductsController extends Controller
 {
@@ -39,8 +37,6 @@ class ProductsController extends Controller
         $product->name = \Request::get('name');
         $product->category_id = \Request::get('category_id');
         $product->description = \Request::get('description');
-        $product->buy_price = \Request::get('buy_price');
-        $product->sell_price = \Request::get('sell_price');
 
         try {
             $product->save();
@@ -92,5 +88,30 @@ class ProductsController extends Controller
         ),
             200
         );
+    }
+
+    public function getStock($id)
+    {
+        $product = Product::find($id);
+
+        if (empty($product)) {
+            return response("404: Product not found: $id", 404);
+        }
+
+        $stock = $product->stock;
+        $quantity = 0;
+
+        if (!empty($stock)) {
+            $quantity = $stock->quantity;
+        }
+
+        return \Response::json(array(
+            'product_id' => $product->id,
+            'quantity' => number_format($quantity, 2),
+            'errors' => false,
+        ),
+            200
+        );
+
     }
 }
