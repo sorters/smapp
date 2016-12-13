@@ -19,6 +19,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
     // Stocks
     Route::get('stocks', 'StocksController@index');
     Route::get('products/{id}/stock', 'ProductsController@getStock');
+    Route::get('products/{id}/stocks', 'ProductsController@getStocks');
     Route::post('products/{id}/refill/{quantity}', 'StocksController@refill');
     Route::post('products/{id}/remove/{quantity}', 'StocksController@remove');
 

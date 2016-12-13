@@ -16,9 +16,9 @@ class Product extends Model
         return $this->hasOne('App\Category');
     }
 
-    public function stock()
+    public function stocks()
     {
-        return $this->hasOne('App\Stock');
+        return $this->hasMany('App\Stock');
     }
 
     public function tags()

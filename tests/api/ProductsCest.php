@@ -154,16 +154,25 @@ class ProductsCest
         $sampleProduct = array('id' => $productId, 'name' => 'product1',
             'description' => 'a test product description for 1');
 
-        $sampleStock = array('product_id' => $productId, 'quantity' => $currentQuantity);
+        $sampleStocks = array(
+            array('id' => '1', 'product_id' => $productId, 'quantity' => $currentQuantity),
+            array('id' => '2', 'product_id' => $productId, 'quantity' => $currentQuantity),
+            array('id' => '3', 'product_id' => $productId, 'quantity' => $currentQuantity),
+            array('id' => '4', 'product_id' => $productId, 'quantity' => $currentQuantity)
+        );
+
+        $expectedQuantity = number_format(100.0 * count($sampleStocks), 2);
 
         $I->wantTo('check the stock of a product via API');
         $I->haveInDatabase('products', $sampleProduct);
-        $I->haveInDatabase('stocks', $sampleStock);
+        foreach ($sampleStocks as $sampleStock) {
+            $I->haveInDatabase('stocks', $sampleStock);
+        }
         $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendGET('/products/'.$productId.'/stock', []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
-        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $currentQuantity));
+        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $expectedQuantity));
     }
 
     public function Get0AsStockForProductWithNoStock(ApiTester $I) {
@@ -180,6 +189,48 @@ class ProductsCest
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $expectedQuantity));
+    }
+
+    public function GetProductStocks(ApiTester $I)
+    {
+        $productId = '1';
+        $currentQuantity = number_format(100.0, 2);
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1');
+
+        $sampleStocks = array(
+            array('id' => '1', 'product_id' => $productId, 'quantity' => $currentQuantity),
+            array('id' => '2', 'product_id' => $productId, 'quantity' => $currentQuantity),
+            array('id' => '3', 'product_id' => $productId, 'quantity' => $currentQuantity),
+            array('id' => '4', 'product_id' => $productId, 'quantity' => $currentQuantity)
+        );
+
+        $I->wantTo('list the stocks of a product via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        foreach ($sampleStocks as $sampleStock) {
+            $I->haveInDatabase('stocks', $sampleStock);
+        }
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendGET('/products/'.$productId.'/stocks');
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(array("errors" => false, "stocks" => $sampleStocks));
+    }
+
+    public function GetEmptyListAsStocksForProductWithNoStocks(ApiTester $I) {
+        $productId = '1';
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1');
+
+        $I->wantTo('check that I get an empty list for a product that has no stocks via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendGET('/products/'.$productId.'/stocks', []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(array("errors" => false, "stocks" => array()));
     }
 
     public function IncrementProductStockTest(ApiTester $I, \Codeception\Scenario $scenario)
