@@ -254,7 +254,7 @@ class ProductsCest
         $productId = '1';
         $expectedTagId = '1';
 
-        $sampleTagName = 'sampleTag';
+        $sampleTagName = 'sampletag';
 
         $sampleProduct = array('id' => $productId, 'name' => 'product1',
             'description' => 'a test product description for 1');
@@ -277,8 +277,8 @@ class ProductsCest
         $sampleTagId1 = '1';
         $sampleTagId2 = '2';
 
-        $sampleTagName1 = 'sampleTag1';
-        $sampleTagName2 = 'sampleTag2';
+        $sampleTagName1 = 'sampletag1';
+        $sampleTagName2 = 'sampletag2';
 
         $sampleProduct = array('id' => $productId, 'name' => 'product1',
             'description' => 'a test product description for 1');
@@ -304,6 +304,31 @@ class ProductsCest
         }
         $I->seeInDatabase('product_tag', array('product_id' => $productId, 'tag_id' => $sampleTagId2));
         $I->dontSeeInDatabase('product_tag', array('product_id' => $productId, 'tag_id' => $sampleTagId1));
+    }
+
+    public function GetTagsForProductTest(ApiTester $I)
+    {
+        $productId = '1';
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1');
+
+        $expectedTags = array(
+            array('id' => '1', 'name' => 'sampletag1'),
+            array('id' => '2', 'name' => 'sampletag2'),
+        );
+
+        $I->wantTo('get the tags of a product via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        foreach($expectedTags as $expectedTag) {
+            $I->haveInDatabase('tags', $expectedTag);
+            $I->haveInDatabase('product_tag', array('tag_id' => $expectedTag['id'], 'product_id' => $sampleProduct['id']));
+        }
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendGET('/products/'.$productId.'/tags');
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(array("errors" => false, "tags" => $expectedTags));
     }
 
 }

@@ -35,6 +35,9 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
     // Tags
     Route::post('products/{idProduct}/tag', 'ProductsController@tag');
     Route::post('products/{idProduct}/untag', 'ProductsController@untag');
+    Route::get('products/{idProduct}/tags', 'ProductsController@tags');
+    Route::get('tags/{idTag}/products', 'TagsController@products');
+
 });
 
 $this->get('login', 'Auth\AuthController@showLoginForm');

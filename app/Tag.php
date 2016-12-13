@@ -16,5 +16,10 @@ class Tag extends Model
         return $this->belongsToMany('App\Product');
     }
 
+    public function setNameAttribute($value)
+    {
+        $this->attributes['name'] = strtolower($value);
+    }
+
 }
 
