@@ -14,7 +14,7 @@ class CreatePurchaselinesTable extends Migration
     {
         Schema::create('purchaselines', function (Blueprint $table) {
             $table->increments('id');
-            $table->boolean('state');
+            $table->boolean('state')->default(true);
             $table->double('unit_price');
             $table->integer('units');
             $table->integer('purchase_order_id')->unsigned()->nullable();

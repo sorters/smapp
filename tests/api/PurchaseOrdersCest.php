@@ -84,7 +84,7 @@ class PurchaseOrdersCest
     public function DeletePurchaseOrderTest(ApiTester $I)
     {
         $samplePurchaseOrderId = '1';
-        $samplePurchaseOrder = array('id' => $samplePurchaseOrderId, 'state' => true, 'comments' => 'a test purchase order comment');
+        $samplePurchaseOrder = array('id' => $samplePurchaseOrderId, 'state' => false, 'comments' => 'a test purchase order comment');
 
         $I->wantTo('delete a purchase order via API');
         $I->haveInDatabase('purchaseorders', $samplePurchaseOrder);
@@ -92,6 +92,18 @@ class PurchaseOrdersCest
         $I->sendDELETE('/purchaseorders/'.$samplePurchaseOrderId, []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->dontSeeInDatabase('purchaseorders', $samplePurchaseOrder);
+    }
+
+    public function AttemptToDeleteOpenPurchaseOrderTest(ApiTester $I)
+    {
+        $samplePurchaseOrderId = '1';
+        $samplePurchaseOrder = array('id' => $samplePurchaseOrderId, 'state' => true, 'comments' => 'a test purchase order comment');
+
+        $I->wantTo('verify that attempting to delete an open purchase order gives a 400 via API');
+        $I->haveInDatabase('purchaseorders', $samplePurchaseOrder);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendDELETE('/purchaseorders/'.$samplePurchaseOrderId, []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST); // 400
     }
 
     public function OpenPurchaseOrderTest(ApiTester $I)

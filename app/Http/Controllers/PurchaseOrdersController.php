@@ -45,9 +45,19 @@ class PurchaseOrdersController extends Controller
     }
 
     public function delete($id) {
-        if (!PurchaseOrder::destroy($id)) {
+
+        $purchaseOrder = PurchaseOrder::find($id);
+
+        if (empty($purchaseOrder)) {
             return response("404: Purchase Order not found: $id", 404);
         }
+
+        if ($purchaseOrder->state) {
+            return response("400: Cannot delete Purchase Order $id: State is not Closed", 400);
+        }
+
+        PurchaseOrder::destroy($id);
+
         return \Response::json(array(
                 'errors' => false,
             ),

@@ -63,6 +63,9 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
     Route::get('purchaseorders/{id}/lines', 'PurchaseOrdersController@lines');
 
     //PurchaseLines
+    Route::get('purchaselines/{id}', 'PurchaseLinesController@find');
+    Route::post('purchaselines', 'PurchaseLinesController@store');
+    Route::delete('purchaselines/{id}', 'PurchaseLinesController@delete');
 
     //SaleOrders
 
