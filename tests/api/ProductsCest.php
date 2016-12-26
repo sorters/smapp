@@ -233,7 +233,7 @@ class ProductsCest
         $I->seeResponseContainsJson(array("errors" => false, "stocks" => array()));
     }
 
-    public function IncrementProductStockTest(ApiTester $I, \Codeception\Scenario $scenario)
+    public function IncrementProductStockTest(ApiTester $I)
     {
         $productId = '1';
         $currentQuantity = number_format(100.0, 2);
@@ -255,6 +255,33 @@ class ProductsCest
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $expectedQuantity));
         $I->seeInDatabase('stocks', array('product_id' => $productId, 'quantity' => $expectedQuantity));
+    }
+
+    public function IncrementProductStockWithNewStockTest(ApiTester $I)
+    {
+        $productId = '1';
+        $currentQuantity = number_format(100.0, 2);
+        $quantityToAdd = 10;
+
+        $expectedQuantity = number_format($currentQuantity + $quantityToAdd, 2);
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1');
+
+        $sampleStock = array('id' => 1, 'product_id' => $productId, 'quantity' => $currentQuantity);
+
+        $sampleNewStock =  array('id' => 2, 'product_id' => $productId, 'quantity' => $quantityToAdd);
+
+        $I->wantTo('increment the stock for a product by creating a new stock via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        $I->haveInDatabase('stocks', $sampleStock);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendPOST('/products/'.$productId.'/refill/'.$quantityToAdd, array('mode' => 'create'));
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $expectedQuantity));
+        $I->seeInDatabase('stocks', $sampleStock);
+        $I->seeInDatabase('stocks', $sampleNewStock);
     }
 
     public function DecrementProductStockTest(ApiTester $I)
@@ -279,6 +306,45 @@ class ProductsCest
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $expectedQuantity));
         $I->seeInDatabase('stocks', array('product_id' => $productId, 'quantity' => $expectedQuantity));
+    }
+
+    public function DecrementSpecificProductStockTest(ApiTester $I)
+    {
+        $productId = '1';
+        $currentQuantity = 100.0;
+        $quantityToRemove = 110;
+
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1');
+
+        $sampleStocks = array(
+            array('id' => 1, 'product_id' => $productId, 'quantity' => $currentQuantity),
+            array('id' => 2, 'product_id' => $productId, 'quantity' => $currentQuantity),
+            array('id' => 3, 'product_id' => $productId, 'quantity' => $currentQuantity),
+        );
+
+        $expectedQuantity = number_format($currentQuantity * count($sampleStocks) - $quantityToRemove, 2);
+
+        $expectedStocks = array(
+            array('id' => 1, 'product_id' => $productId, 'quantity' => 90),
+            array('id' => 2, 'product_id' => $productId, 'quantity' => 0),
+            array('id' => 3, 'product_id' => $productId, 'quantity' => $currentQuantity),
+        );
+
+        $I->wantTo('decrement a specific stock for a product via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        foreach ($sampleStocks as $sampleStock) {
+            $I->haveInDatabase('stocks', $sampleStock);
+        }
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendPOST('/products/'.$productId.'/remove/'.$quantityToRemove.'/2', []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson(array("errors" => false, "product_id" => $productId, "quantity" => $expectedQuantity));
+        foreach ($expectedStocks as $expectedStock) {
+            $I->seeInDatabase('stocks', $expectedStock);
+        }
     }
 
     public function DecrementProductStockBelowZeroTest(ApiTester $I)
@@ -380,6 +446,67 @@ class ProductsCest
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson(array("errors" => false, "tags" => $expectedTags));
+    }
+
+    public function ListPurchaseLinesForProductTest(ApiTester $I)
+    {
+        $categoryId = '1';
+        $productId = '1';
+        $providerId1 = '1';
+        $providerId2 = '2';
+
+        $sampleCategory = array('id' => $categoryId, 'name' => 'category1', 'description' => 'a test category description for 1');
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1', 'category_id' => $categoryId,
+            'description' => 'a test product description for 1');
+
+        $sampleProviders = array(
+            array('id' => $providerId1, 'name' => 'provider1', 'description' => 'a test provider description for 1'),
+            array('id' => $providerId2, 'name' => 'provider2', 'description' => 'a test provider description for 2'),
+        );
+
+        $samplePurchaseOrderId1 = '1';
+        $samplePurchaseOrderId2 = '2';
+        $samplePurchaseOrders = array(
+            array('id' => $samplePurchaseOrderId1, 'state' => true, 'comments' => 'a test purchase order comment'),
+            array('id' => $samplePurchaseOrderId2, 'state' => true, 'comments' => 'a test purchase order comment'),
+        );
+
+        $samplePurchaseLines =array(
+            array('id' => '1',
+                'purchase_order_id' => $samplePurchaseOrderId1,
+                'product_id' => $productId,
+                'provider_id' => $providerId1,
+                'state' => true,
+                'units' => number_format(10, 2),
+                'unit_price' => number_format(12.0, 2)),
+            array('id' => '2',
+                'purchase_order_id' => $samplePurchaseOrderId2,
+                'product_id' => $productId,
+                'provider_id' => $providerId2,
+                'state' => true,
+                'units' => number_format(100, 2),
+                'unit_price' => number_format(9.0, 2))
+        );
+
+        $I->wantTo('list all the purchase lines for a product via API');
+        $I->haveInDatabase('categories', $sampleCategory);
+        $I->haveInDatabase('products', $sampleProduct);
+        foreach($sampleProviders as $sampleProvider) {
+            $I->haveInDatabase('providers', $sampleProvider);
+        }
+        foreach($samplePurchaseOrders as $samplePurchaseOrder) {
+            $I->haveInDatabase('purchaseorders', $samplePurchaseOrder);
+        }
+        $I->haveInDatabase('purchaseorders', $samplePurchaseOrder);
+        foreach($samplePurchaseLines as $samplePurchaseLine) {
+            $I->haveInDatabase('purchaselines', $samplePurchaseLine);
+        }
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendGET('/products/'.$productId.'/purchaselines', []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson($samplePurchaseLines);
     }
 
 }

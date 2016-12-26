@@ -18,6 +18,8 @@ class CreateStocksTable extends Migration
             $table->foreign('product_id')->references('id')->on('products');
             $table->integer('provider_id')->unsigned()->nullable();
             $table->foreign('provider_id')->references('id')->on('providers');
+            $table->integer('purchase_line_id')->unsigned()->nullable();
+            $table->foreign('purchase_line_id')->references('id')->on('purchaselines');
             $table->double('quantity', 12, 2)->default(0);
             $table->double('unit_price', 12, 2)->nullable();
             $table->timestamps();

@@ -8,7 +8,7 @@ class Product extends Model
 {
     protected $table = 'products';
     protected $fillable = [
-        'name', 'category_id', 'stock_id', 'description',
+        'name', 'category_id', 'description',
     ];
 
     public function category()
@@ -25,4 +25,26 @@ class Product extends Model
     {
         return $this->belongsToMany('App\Tag');
     }
+
+    public function productOffers()
+    {
+        return $this->hasMany('App\ProductOffer');
+    }
+
+    public function purchaseLines()
+    {
+        return $this->hasMany('App\PurchaseLine');
+    }
+
+    public function getStockAttribute()
+    {
+        $quantity = 0;
+
+        foreach($this->stocks as $stock) {
+            $quantity += $stock->quantity;
+        }
+
+        return $quantity;
+    }
+
 }

@@ -15,13 +15,14 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
     Route::get('products/{id}', 'ProductsController@find');
     Route::post('products', 'ProductsController@store');
     Route::delete('products/{id}', 'ProductsController@delete');
+    Route::get('products/{id}/purchaselines', 'ProductsController@purchaseLines');
 
     // Stocks
     Route::get('stocks', 'StocksController@index');
     Route::get('products/{id}/stock', 'ProductsController@getStock');
     Route::get('products/{id}/stocks', 'ProductsController@getStocks');
-    Route::post('products/{id}/refill/{quantity}', 'StocksController@refill');
-    Route::post('products/{id}/remove/{quantity}', 'StocksController@remove');
+    Route::post('products/{id}/refill/{quantity}/{stockId?}', 'StocksController@refill');
+    Route::post('products/{id}/remove/{quantity}/{stockId?}', 'StocksController@remove');
 
     // Categories
     Route::get('categories', 'CategoriesController@index');
@@ -38,6 +39,36 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
     Route::post('products/{idProduct}/untag', 'ProductsController@untag');
     Route::get('products/{idProduct}/tags', 'ProductsController@tags');
     Route::get('tags/{idTag}/products', 'TagsController@products');
+
+    //Providers
+    Route::get('providers', 'ProvidersController@index');
+    Route::get('providers/{id}', 'ProvidersController@find');
+    Route::post('providers', 'ProvidersController@store');
+    Route::delete('providers/{id}', 'ProvidersController@delete');
+    Route::get('providers/{id}/lines', 'ProvidersController@lines');
+
+    //Customers
+    Route::get('customers', 'CustomersController@index');
+    Route::get('customers/{id}', 'CustomersController@find');
+    Route::post('customers', 'CustomersController@store');
+    Route::delete('customers/{id}', 'CustomersController@delete');
+
+    //PurchaseOrders
+    Route::get('purchaseorders', 'PurchaseOrdersController@index');
+    Route::get('purchaseorders/{id}', 'PurchaseOrdersController@find');
+    Route::post('purchaseorders', 'PurchaseOrdersController@store');
+    Route::delete('purchaseorders/{id}', 'PurchaseOrdersController@delete');
+    Route::post('purchaseorders/{id}/open', 'PurchaseOrdersController@open');
+    Route::post('purchaseorders/{id}/close', 'PurchaseOrdersController@close');
+    Route::get('purchaseorders/{id}/lines', 'PurchaseOrdersController@lines');
+
+    //PurchaseLines
+
+    //SaleOrders
+
+    //SaleLines
+
+    //Triggers
 
 });
 

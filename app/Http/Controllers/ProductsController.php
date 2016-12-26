@@ -99,11 +99,7 @@ class ProductsController extends Controller
             return response("404: Product not found: $id", 404);
         }
 
-        $quantity = 0;
-
-        foreach($product->stocks as $stock) {
-            $quantity += $stock->quantity;
-        }
+        $quantity = $product->stock;
 
         return \Response::json(array(
             'product_id' => $product->id,
@@ -200,6 +196,18 @@ class ProductsController extends Controller
             200
         );
 
+    }
+
+    public function purchaseLines($id) {
+        $product = Product::find($id);
+
+        if (empty($product)) {
+            return response("404: Product not found: $id", 404);
+        }
+
+        $lines = $product->purchaseLines;
+
+        return \Response::json($lines);
     }
 
 }

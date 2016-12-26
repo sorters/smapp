@@ -58,13 +58,13 @@ class CategoriesCest
         $I->seeInDatabase('categories', $sampleCategory);
     }
 
-    public function UpdateCategorytest(ApiTester $I)
+    public function UpdateCategoryTest(ApiTester $I)
     {
         $sampleCategoryId = '1';
         $sampleCategory = array('id' => $sampleCategoryId, 'name' => 'category', 'description' => 'a test category description');
         $sampleUpdatedCategory = array('id' => $sampleCategoryId, 'name' => 'category', 'description' => 'an updated test category description');
 
-        $I->wantTo('update and existing category via API');
+        $I->wantTo('update an existing category via API');
         $I->haveInDatabase('categories', $sampleCategory);
         $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
         $I->sendPOST('/categories', $sampleUpdatedCategory);
