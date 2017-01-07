@@ -1,5 +1,10 @@
+appname="smapp" # MODIFY APPNAME HERE (OPTIONAL)
 
-a2ensite smapp.conf # change for suitable .conf file.
+# DO NOT MODIFY BELOW THIS LINE ########################
+
+mv smapp.conf /etc/apache2/sites-available/$appname.conf
+
+a2ensite $appname.conf
 
 service apache2 reload
 
