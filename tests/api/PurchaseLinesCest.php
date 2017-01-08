@@ -185,4 +185,53 @@ class PurchaseLinesCest
 
     }
 
+    public function AssignPurchaseLineToPurchaseOrderTest(ApiTester $I) {
+        $categoryId = '1';
+
+        $productId = '1';
+
+        $providerId1 = '1';
+
+        $sampleCategory = array('id' => $categoryId, 'name' => 'category1', 'description' => 'a test category description for 1');
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1', 'category_id' => $categoryId,
+            'description' => 'a test product description for 1');
+
+        $sampleProvider = array('id' => $providerId1, 'name' => 'provider1', 'description' => 'a test provider description for 1');
+
+        $samplePurchaseOrderId = '1';
+        $samplePurchaseOrder = array('id' => $samplePurchaseOrderId, 'state' => true, 'comments' => 'a test purchase order comment');
+
+        $samplePurchaseLineId = '1';
+        $samplePurchaseLine = array(
+            'id' => $samplePurchaseLineId,
+            'product_id' => $productId,
+            'provider_id' => $providerId1,
+            'units' => number_format(10, 2),
+            'unit_price' => number_format(12.0, 2)
+        );
+
+        $samplePurchaseLineAssigned = array(
+            'id' => $samplePurchaseLineId,
+            'purchase_order_id' => $samplePurchaseOrderId,
+            'product_id' => $productId,
+            'provider_id' => $providerId1,
+            'units' => number_format(10, 2),
+            'unit_price' => number_format(12.0, 2)
+        );
+
+        $I->wantTo('assign a purchase line to a purchase order via API');
+        $I->haveInDatabase('categories', $sampleCategory);
+        $I->haveInDatabase('products', $sampleProduct);
+        $I->haveInDatabase('providers', $sampleProvider);
+        $I->haveInDatabase('purchaseorders', $samplePurchaseOrder);
+        $I->haveInDatabase('purchaselines', $samplePurchaseLine);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendPOST('/purchaselines/'.$samplePurchaseLineId.'/assign/'.$samplePurchaseOrderId, []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContains('"errors":false');
+        $I->seeInDatabase('purchaselines', $samplePurchaseLineAssigned);
+    }
+
 }

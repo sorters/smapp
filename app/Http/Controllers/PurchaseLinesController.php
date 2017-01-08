@@ -45,6 +45,36 @@ class PurchaseLinesController extends Controller
         );
     }
 
+    public function assign($lineId, $orderId) {
+
+        $purchaseLine = PurchaseLine::find($lineId);
+
+        if (empty($purchaseLine)) {
+            return response("404: Purchase Line not found: $lineId", 404);
+        }
+
+        $purchaseOrder = PurchaseOrder::find($orderId);
+
+        if (empty($purchaseOrder)) {
+            return response("404: Purchase Order not found: $orderId", 404);
+        }
+
+        $purchaseLine->purchase_order_id = $orderId;
+
+        try {
+            $purchaseLine->save();
+        } catch (QueryException $e) {
+            return response('400: Bad request', 400);
+        }
+
+        return \Response::json(array(
+            'errors' => false,
+        ),
+            200
+        );
+
+    }
+
     public function delete($id) {
         if (!PurchaseLine::destroy($id)) {
             return response("404: Purchase Line not found: $id", 404);

@@ -66,6 +66,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
     Route::get('purchaselines/{id}', 'PurchaseLinesController@find');
     Route::post('purchaselines', 'PurchaseLinesController@store');
     Route::delete('purchaselines/{id}', 'PurchaseLinesController@delete');
+    Route::post('purchaselines/{lineId}/assign/{orderId}', 'PurchaseLinesController@assign');
 
     //SaleOrders
 
