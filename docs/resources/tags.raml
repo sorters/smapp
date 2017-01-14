@@ -1,0 +1,9 @@
+get:
+  description: List the products that are tagged with this Tag.
+  responses:
+    200:
+      description: A list of products. 
+      body:
+        type: ProductSummary[]
+    401:
+      description: Unauthorized

@@ -15,6 +15,8 @@ CREATE TABLE "product_tag" ("id" integer not null primary key autoincrement, "pr
 CREATE TABLE "categories" ("id" integer not null primary key autoincrement, "name" varchar not null, "description" varchar not null, "created_at" datetime null, "updated_at" datetime null);
 CREATE TABLE "productoffers" ("id" integer not null primary key autoincrement, "product_id" integer not null, "provider_id" integer null, "unit_price" float null, "delivery" date null, "created_at" datetime null, "updated_at" datetime null, foreign key("product_id") references "products"("id"), foreign key("provider_id") references "providers"("id"));
 CREATE TABLE "customers" ("id" integer not null primary key autoincrement, "name" varchar not null, "description" varchar not null, "created_at" datetime null, "updated_at" datetime null);
+CREATE TABLE "saleorders" ("id" integer not null primary key autoincrement, "customer_id" integer null, "state" tinyint(1) not null default '1', "comments" varchar not null, "created_at" datetime null, "updated_at" datetime null, foreign key("customer_id") references "customers"("id"));
+CREATE TABLE "salelines" ("id" integer not null primary key autoincrement, "state" tinyint(1) not null default '1', "unit_price" float not null, "units" integer not null, "sale_order_id" integer null, "product_id" integer not null, "created_at" datetime null, "updated_at" datetime null, foreign key("sale_order_id") references "saleorders"("id"), foreign key("product_id") references "products"("id"));
 
 CREATE UNIQUE INDEX "users_email_unique" on "users" ("email");
 CREATE UNIQUE INDEX "tags_name_unique" on "tags" ("name");

@@ -1,0 +1,36 @@
+description: A Purchase line
+properties:
+  id:
+    description: A unique identifier for the Purchase line.
+    type: integer
+    example: 32991 
+  product_id:
+    description: The ID of the purchased product.
+    type: integer
+    example: 12
+  provider_id:
+    description: The ID of the provider from who the product is purchased.
+    type: integer
+    example: 2
+  purchase_order_id:
+    required: false
+    description: The ID of the Purchase order to which the Purchase line belongs.
+    type: integer
+    example: 12424
+  stock_id:
+    required: false
+    description: The ID of the stock the purchase line has generated when acknowledged.
+    type: integer
+    example: 322
+  units:
+    description: The number of units of the product.
+    type: number
+    example: 1200.00
+  unit_price:
+    description: The price per unit of the product.
+    type: number
+    example: 9.95
+  state:
+    description: The state of the purchase line (true if pending, false otherwise)
+    type: boolean
+    example: true

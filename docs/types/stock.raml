@@ -1,0 +1,24 @@
+description: A Stock
+properties:
+  id:
+    description: A unique identifier for the Stock.
+    type: integer
+    example: 218
+  product_id:
+    description: The Product of which the stock is.
+    type: integer
+    example: 12
+  provider_id:
+    required: false
+    description: The Provider from which the stock has been purchased.
+    type: integer
+    example: 10
+  purchase_line_id:
+    required: false
+    description: The Purchase line from which the stock has been created.
+    type: integer
+    example: 12203
+  quantity:
+    description: The quantity of product the stock has.
+    type: number
+    example: 1000.00

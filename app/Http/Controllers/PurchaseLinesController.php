@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\PurchaseLine;
 use App\PurchaseOrder;
+use App\Stock;
 
 class PurchaseLinesController extends Controller
 {
@@ -74,6 +75,47 @@ class PurchaseLinesController extends Controller
         );
 
     }
+
+
+    public function acknowledge($id) {
+
+        $purchaseLine = PurchaseLine::find($id);
+
+        if (empty($purchaseLine)) {
+            return response("404: Purchase Line not found: $id", 404);
+        }
+
+        $stock = new Stock();
+
+        $stock->purchase_line_id = $purchaseLine->id;
+        $stock->product_id = $purchaseLine->product_id;
+        $stock->provider_id = $purchaseLine->provider_id;
+        $stock->quantity = $purchaseLine->units;
+        $stock->unit_price = $purchaseLine->unit_price;
+
+        try {
+            $stock->save();
+        } catch (QueryException $e) {
+            return response('400: Bad request', 400);
+        }
+
+        $purchaseLine->state = false;
+
+        try {
+            $purchaseLine->save();
+        } catch (QueryException $e) {
+            return response('400: Bad request', 400);
+        }
+
+        return \Response::json(array(
+            'errors' => false,
+        ),
+            200
+        );
+
+    }
+
+
 
     public function delete($id) {
         if (!PurchaseLine::destroy($id)) {

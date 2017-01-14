@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\PurchaseOrder;
+use App\SaleOrder;
 
-class PurchaseOrdersController extends Controller
+class SaleOrdersController extends Controller
 {
     public function index() {
-        $purchaseOrders = PurchaseOrder::all();
-        return \Response::json($purchaseOrders);
+        $saleOrders = SaleOrder::all();
+        return \Response::json($saleOrders);
     }
-
+/*
     public function find($id) {
         $purchaseOrder = PurchaseOrder::find($id);
 
@@ -116,5 +116,5 @@ class PurchaseOrdersController extends Controller
 
         return \Response::json($lines);
     }
-
+*/
 }

@@ -12,276 +12,60 @@ documentation:
       Authentication for the use of the API is by using the Authorization Header with the API Token provided on installation.
 
 /products:
-  get:
-    description: List all the available Products.
-    responses:
-      200:
-        description: A list of Products.
-        body:
-          type: Product[]
-      401:
-        description: Unauthorized
-
-  post:
-    description: Create or Modify a Product. If a parameter 'id' for an existing Product is passed in the body the resource will update the existing Product.
-    body:
-      type: ProductResource
-    responses:
-      200:
-        description: The ID of the Product created or modified.
-        body:
-          type: integer
-          example: 27
-      400:
-        description: Bad request
-      401:
-        description: Unauthorized
-
-/products/{id}:
-  uriParameters:
-    id:
-      description: The unique identifier for the Product.
-      type: integer
-      example: 27
-
-  get:
-    description: List details of a Product.
-    responses:
-      200:
-        description: The details of a Product.
-        body:
-          type: Product
-      401:
-        description: Unauthorized
-      404:
-        description: Not found
-
-  delete:
-    description: Deletes the Product.
-    responses:
-      200:
-        description: The deletion was successful.
-      401:
-        description: Unauthorized
-
-/products/{id}/refill/{quantity}:
-  uriParameters:
-    id:
-      description: The unique identifier for the Product.
-      type: integer
-      example: 27
-    quantity:
-      description: The quantity to add to the stock of the Product.
-      type: number
-      example: 120
-
-  post:
-    description: Increase quantity of stock for Product.
-    responses:
-      200:
-        description:
-        body:
-          properties:
-            product_id:
-              description: The unique identifier of the Product.
-              type: integer
-              example: 27
-            quantity:
-              description: The quantity after the increase.
-              type: number
-              example: 240
-      401:
-        description: Unauthorized
-      404:
-        description: Not found
-
-/products/{id}/remove/{quantity}:
-  uriParameters:
-    id:
-      description: The unique identifier for the Product.
-      type: integer
-      example: 27
-    quantity:
-      description: The quantity to remove from the stock of the Product.
-      type: number
-      example: 120
-
-  post:
-    description: Decrease quantity of stock for Product.
-    responses:
-      200:
-        description:
-        body:
-          properties:
-            product_id:
-              description: The unique identifier of the Product.
-              type: integer
-              example: 27
-            quantity:
-              description: The quantity after the decrease.
-              type: number
-              example: 120
-      400:
-        description: Bad request
-      401:
-        description: Unauthorized
-      404:
-        description: Not found
+  !include resources/products.raml
 
 /categories:
-  get:
-    description: List all the available Categories.
-    responses:
-      200:
-        description: A list of Categories.
-        body:
-          type: Category[]
-      401:
-        description: Unauthorized
+  !include resources/categories.raml
 
-  post:
-    description: Create or Modify a Category. If a parameter 'id' for an existing Category is passed in the body the resource will update the existing Category.
-    body:
-      type: CategoryResource
-    responses:
-      200:
-        description: The ID of the Category created or modified.
-        body:
-          type: integer
-          example: 3
-      400:
-        description: Bad request
-      401:
-        description: Unauthorized
+/stocks:
+  !include resources/stocks.raml
 
-/categories/{id}:
-  uriParameters:
-    id:
-      description: The unique identifier for the Category.
-      type: integer
-      example: 3
+/tags:
+  !include resources/tags.raml
 
-  get:
-    description: List details of a Category.
-    responses:
-      200:
-        description: The details of a Category.
-        body:
-          type: Category
-      401:
-        description: Unauthorized
-      404:
-        description: Not found
+/providers:
+  !include resources/providers.raml
 
-  delete:
-    description: Deletes the Category.
-    responses:
-      200:
-        description: The deletion was successful.
-      401:
-        description: Unauthorized
-
-/categories/{idCategory}/products:
-  uriParameters:
-    idCategory:
-      description: The unique identifier for the Category.
-      type: integer
-      example: 3
-
-  get:
-    description: Lists all the Products that belong to the Category.
-    responses:
-      200:
-        description: A list of all the Products that belong to the Category.
-        body:
-          type: Category[]
-      401:
-        description: Unauthorized
-      404:
-        description: Not found
-
-  post:
-    body:
-      application/json:
-        example: |
-          "products":"21,22,23,24"
-    description: Assign the Products to the Category
-    responses:
-      200:
-        description: The assignment was successful
+/customers:
+  !include resources/customers.raml
 
 types:
 
   ProductResource:
-    description: The resource for a Product to be created.
-    properties:
-      name:
-        description: A unique name for the Product.
-        type: string
-        example: Keyboard
-      description:
-        description: A description for the Product.
-        type: string
-        example: Wireless standard QWERTY keyboard
-      category_id:
-        description: (Optional) The identifier of the Category to which the Product belongs, if any.
-        type: integer
-        example: 3
-        required: false
-
-  CategoryResource:
-    description: The resource for a Category to be created.
-    properties:
-      name:
-        description: A unique name for the Category.
-        type: string
-        example: Hardware
-      description:
-        description: A description for the Category.
-        type: string
-        example: Hardware items
+    !include types/productresource.raml
 
   Product:
-    description: A Product
-    properties:
-      id:
-        description: A unique identifier for the Product.
-        type: integer
-        example: 27
-      name:
-        description: A unique name for the Product.
-        type: string
-        example: Keyboard
-      description:
-        description: A description for the Product.
-        type: string
-        example: Wireless standard QWERTY keyboard
-      category_id:
-        description: The identifier of the Category to which the Product belongs, if any.
-        type: integer
-        example: 3
-        required: false
-      created_at:
-        description: The date when the Product was first created.
-        type: datetime
-        example: 2016-12-02T15:01:12Z
-      updated_at:
-        description: The date when the Product was last modified.
-        type: datetime
-        example: 2016-12-06T12:33:52Z
+    !include types/product.raml
+
+  ProductSummary:
+    !include types/productsummary.raml
+
+  CategoryResource:
+    !include types/categoryresource.raml
 
   Category:
-    description: A Category
-    properties:
-      id:
-        description: A unique identifier for the Category.
-        type: integer
-        example: 3
-      name:
-        description: A unique name for the Category.
-        type: string
-        example: Hardware
-      description:
-        description: A description for the Category.
-        type: string
-        example: Hardware Items
+    !include types/category.raml
+
+  TagResource:
+    !include types/tagresource.raml
+
+  Tag:
+    !include types/tag.raml
+
+  Stock:
+    !include types/stock.raml
+
+  ProviderResource:
+    !include types/providerresource.raml
+
+  Provider:
+    !include types/provider.raml
+
+  CustomerResource:
+    !include types/customerresource.raml
+
+  Customer:
+    !include types/customer.raml
+
+  PurchaseLine:
+    !include types/purchaseline.raml

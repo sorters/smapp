@@ -1,0 +1,27 @@
+description: A Product
+properties:
+  id:
+    description: A unique identifier for the Product.
+    type: integer
+    example: 27
+  name:
+    description: A unique name for the Product.
+    type: string
+    example: Keyboard
+  description:
+    description: A description for the Product.
+    type: string
+    example: Wireless standard QWERTY keyboard
+  category_id:
+    description: The identifier of the Category to which the Product belongs, if any.
+    type: integer
+    example: 3
+    required: false
+  created_at:
+    description: The date when the Product was first created.
+    type: datetime
+    example: 2016-12-02T15:01:12Z
+  updated_at:
+    description: The date when the Product was last modified.
+    type: datetime
+    example: 2016-12-06T12:33:52Z

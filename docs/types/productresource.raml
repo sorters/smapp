@@ -1,0 +1,20 @@
+description: The resource for a Product to be created.
+properties:
+  id:
+    required: false
+    description: A unique identifier for the Product.
+    type: integer
+    example: 21
+  name:
+    description: A unique name for the Product.
+    type: string
+    example: Keyboard
+  description:
+    description: A description for the Product.
+    type: string
+    example: Wireless standard QWERTY keyboard
+  category_id:
+    description: (Optional) The identifier of the Category to which the Product belongs, if any.
+    type: integer
+    example: 3
+    required: false

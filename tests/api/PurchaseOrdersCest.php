@@ -134,6 +134,39 @@ class PurchaseOrdersCest
         $I->seeInDatabase('purchaseorders', $samplePurchaseOrderClosed);
     }
 
+    public function ClosePurchaseOrderWithOpenLineTest(ApiTester $I)
+    {
+        $productId = '1';
+        $sampleProduct = array('id' => $productId, 'name' => 'product1',
+            'description' => 'a test product description for 1');
+
+        $providerId1 = '1';
+        $sampleProvider = array('id' => $providerId1, 'name' => 'provider1', 'description' => 'a test provider description for 1');
+
+
+        $samplePurchaseOrderId = '1';
+        $samplePurchaseOrder = array('id' => $samplePurchaseOrderId, 'state' => true, 'comments' => 'a test purchase order comment');
+
+        $samplePurchaseLineId = '1';
+        $samplePurchaseLine = array(
+            'id' => $samplePurchaseLineId,
+            'purchase_order_id' => $samplePurchaseOrderId,
+            'product_id' => $productId,
+            'provider_id' => $providerId1,
+            'units' => number_format(10, 2),
+            'unit_price' => number_format(12.0, 2)
+        );
+
+        $I->wantTo('check attempting to close a purchase order with open purchase lines fails via API');
+        $I->haveInDatabase('products', $sampleProduct);
+        $I->haveInDatabase('providers', $sampleProvider);
+        $I->haveInDatabase('purchaseorders', $samplePurchaseOrder);
+        $I->haveInDatabase('purchaselines', $samplePurchaseLine);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendPOST('/purchaseorders/'.$samplePurchaseOrderId.'/close', []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::BAD_REQUEST); // 400
+    }
+
     public function ListPurchaseLinesFromPurchaseOrderTest(ApiTester $I)
     {
         $categoryId = '1';

@@ -52,6 +52,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
     Route::get('customers/{id}', 'CustomersController@find');
     Route::post('customers', 'CustomersController@store');
     Route::delete('customers/{id}', 'CustomersController@delete');
+    Route::get('customers/{id}/orders', 'CustomersController@orders');
 
     //PurchaseOrders
     Route::get('purchaseorders', 'PurchaseOrdersController@index');
@@ -67,8 +68,10 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
     Route::post('purchaselines', 'PurchaseLinesController@store');
     Route::delete('purchaselines/{id}', 'PurchaseLinesController@delete');
     Route::post('purchaselines/{lineId}/assign/{orderId}', 'PurchaseLinesController@assign');
+    Route::post('purchaselines/{id}/acknowledge', 'PurchaseLinesController@acknowledge');
 
     //SaleOrders
+    Route::get('saleorders', 'SaleOrdersController@index');
 
     //SaleLines
 
