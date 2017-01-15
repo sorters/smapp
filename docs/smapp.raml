@@ -49,6 +49,9 @@ documentation:
 /customers:
   !include resources/customers.raml
 
+/purchaseorders:
+  !include resources/purchaseorders.raml
+
 types:
 
   ProductResource:
@@ -87,5 +90,14 @@ types:
   Customer:
     !include types/customer.raml
 
+  PurchaseOrderResource:
+    !include types/purchaseorderresource.raml
+
+  PurchaseOrder:
+    !include types/purchaseorder.raml
+
   PurchaseLine:
     !include types/purchaseline.raml
+
+  SaleOrder:
+    !include types/saleorder.raml

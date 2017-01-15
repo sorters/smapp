@@ -1,0 +1,18 @@
+description: A Sale order
+properties:
+  id:
+    description: A unique identifier for the Sale order.
+    type: integer
+    example: 15202 
+  customer_id:
+    description: The ID of the customer to who the order is sold.
+    type: integer
+    example: 12
+  comments:
+    description: Comments regarding the order.
+    type: string
+    example: "The items in this order have to be delivered wrapped up."
+  state:
+    description: The state of the Sale order (true if pending, false otherwise)
+    type: boolean
+    example: true
