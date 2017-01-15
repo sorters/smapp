@@ -8,7 +8,7 @@ Route::get('/docs', function() {
     return response()->file('../docs/smapp.html');
 });
 
-Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api']], function()
+Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api', 'cors']], function()
 {
     // Products
     Route::get('products', 'ProductsController@index');
