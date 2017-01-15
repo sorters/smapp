@@ -1,15 +1,35 @@
 #%RAML 1.0
 title: SMAPP
 
-baseUri: http://smapp.sorters.io/api/{version}
+baseUri: http://localhost:8000/api/{version}
 version: v1
 mediaType: application/json
 protocols:
   - HTTP
+
+securedBy: basicAuth
+securitySchemes:
+  basicAuth:
+    description: |
+      Authentication for the use of the API is by using the Authorization Header with the API Token provided on installation.
+    type: Basic Authentication
+    describedBy:
+      headers:
+        Authorization:
+          description: |
+            Used to send the API Token provided by the app instance
+          type: string
+          example: Bearer DrVs32TUurjFPmTXuNP9b2dO7uSOny14ZsbYtpANNdeMiVvglgX61cq2b6nO
+      responses:
+        401:
+          description: |
+            Unauthorized. The API Token provided is not correct or is not being sent
+
 documentation:
   - title: Documentation for the SMAPP API
     content: |
-      Authentication for the use of the API is by using the Authorization Header with the API Token provided on installation.
+      Specification and instructions for the usage of the SMAPP API.
+      
 
 /products:
   !include resources/products.raml
