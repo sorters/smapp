@@ -1,0 +1,30 @@
+description: A Trigger
+properties:
+  id:
+    description: A unique identifier for the Trigger.
+    type: integer
+    example: 21
+  threshold:
+    description: The threshold below of which the Trigger should be fired.
+    type: integer
+    example: 120
+  offset:
+    description: The amount of units of the product that must be purchased (beyond the threshold if fill is true, absolute otherwise).
+    type: integer
+    example: 20
+  fill:
+    description: If the threshold has to be met as a result of the purchase.
+    type: boolean
+    example: true
+  enabled:
+    description: The state of the Trigger. If enabled it will be fired, otherwise it will be ignored.
+    type: boolean
+    example: true
+  created_at:
+    description: The date when the Trigger was first created.
+    type: datetime
+    example: 2016-12-02T15:01:12Z
+  updated_at:
+    description: The date when the Trigger was last modified.
+    type: datetime
+    example: 2016-12-06T12:33:52Z

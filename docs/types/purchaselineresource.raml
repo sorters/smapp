@@ -1,6 +1,7 @@
-description: A Purchase line
+description: The resource for a Purchase line to be created or modified.
 properties:
   id:
+    required: false
     description: A unique identifier for the Purchase line.
     type: integer
     example: 32991 
@@ -14,7 +15,7 @@ properties:
     example: 2
   purchase_order_id:
     required: false
-    description: The ID of the purchase order to which the Purchase line belongs.
+    description: The ID of the Purchase order to which the Purchase line belongs.
     type: integer
     example: 12424
   stock_id:
@@ -30,15 +31,3 @@ properties:
     description: The price per unit of the product.
     type: number
     example: 9.95
-  state:
-    description: The state of the purchase line (true if pending, false otherwise)
-    type: boolean
-    example: true
-  created_at:
-    description: The date when the Purchase line was first created.
-    type: datetime
-    example: 2016-12-02T15:01:12Z
-  updated_at:
-    description: The date when the Purchase line was last modified.
-    type: datetime
-    example: 2016-12-06T12:33:52Z

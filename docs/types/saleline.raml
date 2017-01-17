@@ -1,0 +1,35 @@
+description: A Sale line
+properties:
+  id:
+    description: A unique identifier for the Sale line.
+    type: integer
+    example: 32991 
+  product_id:
+    description: The ID of the sold product.
+    type: integer
+    example: 12
+  sale_order_id:
+    required: false
+    description: The ID of the Sale order to which the Sale line belongs.
+    type: integer
+    example: 12424
+  units:
+    description: The number of units of the product.
+    type: number
+    example: 1200.00
+  unit_price:
+    description: The price per unit of the product.
+    type: number
+    example: 9.95
+  state:
+    description: The state of the sale line (true if pending, false otherwise)
+    type: boolean
+    example: true
+  created_at:
+    description: The date when the Sale line was first created.
+    type: datetime
+    example: 2016-12-02T15:01:12Z
+  updated_at:
+    description: The date when the Sale line was last modified.
+    type: datetime
+    example: 2016-12-06T12:33:52Z

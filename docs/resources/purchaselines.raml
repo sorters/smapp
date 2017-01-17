@@ -1,0 +1,75 @@
+post:
+  description: Create or Modify a Purchase line. If a parameter 'id' for an existing Purchase line is passed in the body the resource will update the existing Purchase line.
+  body:
+    type: PurchaseLineResource
+  responses:
+    200:
+      description: The ID of the Purchase line created or modified.
+      body:
+        type: integer
+        example: 6100
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+
+/{id}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Purchase line.
+      type: integer
+      example: 6100
+
+  get:
+    description: List details of a Purchase line
+    responses:
+      200:
+        description: The details of a Purchase line
+        body:
+          type: PurchaseLine
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+  delete:
+    description: Deletes the Purchase line
+    responses:
+      200: 
+        description: The deletion was successful
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+  /assign/{orderId}:
+    uriParameters:
+      orderId:
+        description: The unique identifier for the Purchase order.
+        type: integer
+        example: 610
+
+    post:
+      description: Assigns the Purchase line to the Purchase order
+      responses:
+        200:
+          description: The assignment was successful
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
+
+  /acknowledge:
+    post:
+      description: "Acknowledges a Purchase line: Updates (increases) the stock according to the line and sets the line's state to Closed."
+      responses:
+        200:
+          description: The operation was successful
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        404:
+          description: Not found

@@ -1,0 +1,75 @@
+post:
+  description: Create or Modify a Sale line. If a parameter 'id' for an existing Sale line is passed in the body the resource will update the existing Sale line.
+  body:
+    type: SaleLineResource
+  responses:
+    200:
+      description: The ID of the Sale line created or modified.
+      body:
+        type: integer
+        example: 6100
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+
+/{id}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Sale line.
+      type: integer
+      example: 6100
+
+  get:
+    description: List details of a Sale line
+    responses:
+      200:
+        description: The details of a Sale line
+        body:
+          type: SaleLine
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+  delete:
+    description: Deletes the Sale line
+    responses:
+      200: 
+        description: The deletion was successful
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+  /assign/{orderId}:
+    uriParameters:
+      orderId:
+        description: The unique identifier for the Sale order.
+        type: integer
+        example: 610
+
+    post:
+      description: Assigns the Sale line to the Sale order
+      responses:
+        200:
+          description: The assignment was successful
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
+
+  /acknowledge:
+    post:
+      description: "Acknowledges a Sale line: Updates (decreases) the stock according to the line and sets the line's state to Closed."
+      responses:
+        200:
+          description: The operation was successful
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        404:
+          description: Not found

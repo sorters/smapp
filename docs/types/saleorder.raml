@@ -3,12 +3,14 @@ properties:
   id:
     description: A unique identifier for the Sale order.
     type: integer
-    example: 15202 
+    example: 152 
   customer_id:
+    required: false
     description: The ID of the customer to who the order is sold.
     type: integer
     example: 12
   comments:
+    required: false
     description: Comments regarding the order.
     type: string
     example: "The items in this order have to be delivered wrapped up."
@@ -16,3 +18,11 @@ properties:
     description: The state of the Sale order (true if pending, false otherwise)
     type: boolean
     example: true
+  created_at:
+    description: The date when the Sale order was first created.
+    type: datetime
+    example: 2016-12-02T15:01:12Z
+  updated_at:
+    description: The date when the Sale order was last modified.
+    type: datetime
+    example: 2016-12-06T12:33:52Z

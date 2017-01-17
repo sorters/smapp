@@ -237,9 +237,35 @@
         description: List the purchase lines for a Product
         responses:
           200:
-            description: The current purchase lines that refer to the product.
+            description: The purchase lines that refer to the product.
             body:
               type: PurchaseLine[]
+          401:
+            description: Unauthorized
+          404:
+            description: Not found
+
+    /salelines:
+      get:
+        description: List the sale lines for a Product
+        responses:
+          200:
+            description: The sale lines that refer to the product.
+            body:
+              type: SaleLine[]
+          401:
+            description: Unauthorized
+          404:
+            description: Not found
+
+    /offers:
+      get:
+        description: List the product offers for a Product.
+        responses:
+          200:
+            description: The offers for the Product.
+            body:
+              type: ProductOffer[]
           401:
             description: Unauthorized
           404:

@@ -1,0 +1,30 @@
+description: A Product offer
+properties:
+  id:
+    description: A unique identifier for the Product offer.
+    type: integer
+    example: 72
+  product_id:
+    description: The ID of the purchased product.
+    type: integer
+    example: 12
+  provider_id:
+    description: The ID of the provider from who the product is purchased.
+    type: integer
+    example: 2
+  unit_price:
+    description: The price per unit of the product.
+    type: number
+    example: 9.95
+  delivery:
+    description: The estimated time (units TBD) the provider will take to fulfill an order.
+    type: integer
+    example: 48
+  created_at:
+    description: The date when the Product offer was first created.
+    type: datetime
+    example: 2016-12-02T15:01:12Z
+  updated_at:
+    description: The date when the Product offer was last modified.
+    type: datetime
+    example: 2016-12-06T12:33:52Z

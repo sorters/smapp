@@ -34,14 +34,20 @@ documentation:
 /products:
   !include resources/products.raml
 
+/productoffers:
+  !include resources/productoffers.raml
+
 /categories:
   !include resources/categories.raml
+
+/tags:
+  !include resources/tags.raml
 
 /stocks:
   !include resources/stocks.raml
 
-/tags:
-  !include resources/tags.raml
+/triggers:
+  !include resources/triggers.raml
 
 /providers:
   !include resources/providers.raml
@@ -51,6 +57,15 @@ documentation:
 
 /purchaseorders:
   !include resources/purchaseorders.raml
+
+/purchaselines:
+  !include resources/purchaselines.raml
+
+/saleorders:
+  !include resources/saleorders.raml
+
+/salelines:
+  !include resources/salelines.raml
 
 types:
 
@@ -62,6 +77,12 @@ types:
 
   ProductSummary:
     !include types/productsummary.raml
+
+  ProductOfferResource:
+    !include types/productofferresource.raml
+
+  ProductOffer:
+    !include types/productoffer.raml
 
   CategoryResource:
     !include types/categoryresource.raml
@@ -96,8 +117,24 @@ types:
   PurchaseOrder:
     !include types/purchaseorder.raml
 
+  PurchaseLineResource:
+    !include types/purchaselineresource.raml
+
   PurchaseLine:
     !include types/purchaseline.raml
 
+  SaleOrderResource:
+    !include types/saleorderresource.raml
+  
   SaleOrder:
     !include types/saleorder.raml
+
+  SaleLineResource:
+    !include types/salelineresource.raml
+
+  SaleLine:
+    !include types/saleline.raml
+
+  TriggerResource:
+
+  Trigger:

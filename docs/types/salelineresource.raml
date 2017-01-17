@@ -1,0 +1,24 @@
+description: The resource for a Sale line to be created or modified.
+properties:
+  id:
+    required: false
+    description: A unique identifier for the Sale line.
+    type: integer
+    example: 32991 
+  product_id:
+    description: The ID of the sold product.
+    type: integer
+    example: 12
+  sale_order_id:
+    required: false
+    description: The ID of the Sale order to which the Sale line belongs.
+    type: integer
+    example: 12424
+  units:
+    description: The number of units of the product.
+    type: number
+    example: 1200.00
+  unit_price:
+    description: The price per unit of the product.
+    type: number
+    example: 9.95

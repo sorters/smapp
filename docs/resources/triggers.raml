@@ -1,0 +1,79 @@
+get:
+  description: List all the available Triggers.
+  responses:
+    200:
+      description: A list of Triggers.
+      body:
+        type: Trigger[]
+    401:
+      description: Unauthorized
+
+post:
+  description: Create or Modify a Trigger. If a parameter 'id' for an existing Trigger is passed in the body the resource will update the existing Trigger.
+  body:
+    type: TriggerResource
+  responses:
+    200:
+      description: The ID of the Trigger created or modified.
+      body:
+        type: integer
+        example: 27
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+
+/{id}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Trigger.
+      type: integer
+      example: 27
+
+  get:
+    description: List details of a Trigger.
+    responses:
+      200:
+        description: The details of a Trigger.
+        body:
+          type: Trigger
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+  delete:
+    description: Deletes the Trigger.
+    responses:
+      200:
+        description: The deletion was successful.
+      401:
+        description: Unauthorized
+
+  /enable:
+
+    post:
+      description: Enables the Trigger.
+      responses:
+        200:
+          description: The Trigger has been successfully enabled.
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        404:
+          description: Not found
+
+  /disable:
+
+    post:
+      description: Disables the Trigger.
+      responses:
+        200:
+          description: The Trigger has been successfully disabled.
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+        404:
+          description: Not found

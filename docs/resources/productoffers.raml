@@ -1,0 +1,51 @@
+get:
+  description: List all the available Product offers.
+  responses:
+    200:
+      description: A list of Product offers.
+      body:
+        type: ProductOffer[]
+    401:
+      description: Unauthorized
+
+post:
+  description: Create or Modify a Product offer. If a parameter 'id' for an existing Product offer is passed in the body the resource will update the existing Product offer.
+  body:
+    type: ProductOfferResource
+  responses:
+    200:
+      description: The ID of the Product offer created or modified.
+      body:
+        type: integer
+        example: 72
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+
+/{id}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Product offer.
+      type: integer
+      example: 72
+
+  get:
+    description: List details of a Product offer.
+    responses:
+      200:
+        description: The details of a Product offer.
+        body:
+          type: ProductOffer
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+  delete:
+    description: Deletes the Product offer.
+    responses:
+      200:
+        description: The deletion was successful.
+      401:
+        description: Unauthorized
