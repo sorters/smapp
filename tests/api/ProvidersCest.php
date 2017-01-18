@@ -156,4 +156,45 @@ class ProvidersCest
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson($samplePurchaseLines);
     }
+
+    public function ListOffersForProviderTest(ApiTester $I)
+    {
+        $categoryId = '1';
+        $productId1 = '1';
+        $productId2 = '2';
+        $providerId = '1';
+
+        $sampleCategory = array('id' => $categoryId, 'name' => 'category1', 'description' => 'a test category description for 1');
+
+        $sampleProducts = array(
+            array('id' => $productId1, 'name' => 'product1', 'category_id' => $categoryId,
+            'description' => 'a test product description for 1'),
+            array('id' => $productId2, 'name' => 'product1', 'category_id' => $categoryId,
+                'description' => 'a test product description for 1'),
+        );
+
+        $sampleProvider = array('id' => $providerId, 'name' => 'provider1', 'description' => 'a test provider description for 1');
+
+        $sampleProductOffers = array(
+            array('id' => '1', 'unit_price' => number_format(9.0, 2), 'product_id' => $productId1, 'provider_id' => $providerId),
+            array('id' => '2', 'unit_price' => number_format(8.0, 2), 'product_id' => $productId2, 'provider_id' => $providerId),
+        );
+
+        $I->wantTo('list all the product offers for a product via API');
+        $I->haveInDatabase('categories', $sampleCategory);
+        $I->haveInDatabase('providers', $sampleProvider);
+        foreach($sampleProducts as $sampleProduct) {
+            $I->haveInDatabase('products', $sampleProduct);
+        }
+        foreach($sampleProductOffers as $sampleProductOffer) {
+            $I->haveInDatabase('productoffers', $sampleProductOffer);
+        }
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendGET('/providers/'.$providerId.'/offers', []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson($sampleProductOffers);
+    }
+
+
 }

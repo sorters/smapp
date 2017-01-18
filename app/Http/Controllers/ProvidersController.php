@@ -68,4 +68,16 @@ class ProvidersController extends Controller
         return \Response::json($lines);
     }
 
+    public function offers($id) {
+        $provider = Provider::find($id);
+
+        if (empty($provider)) {
+            return response("404: Provider not found: $id", 404);
+        }
+
+        $offers = $provider->offers;
+
+        return \Response::json($offers);
+    }
+
 }

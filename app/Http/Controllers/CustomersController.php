@@ -56,4 +56,16 @@ class CustomersController extends Controller
         );
     }
 
+    public function orders($id) {
+        $customer = Customer::find($id);
+
+        if (empty($customer)) {
+            return response("404: Customer not found: $id", 404);
+        }
+
+        $orders = $customer->orders;
+
+        return \Response::json($orders);
+    }
+
 }

@@ -16,6 +16,8 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api', 'cors']], funct
     Route::post('products', 'ProductsController@store');
     Route::delete('products/{id}', 'ProductsController@delete');
     Route::get('products/{id}/purchaselines', 'ProductsController@purchaseLines');
+    Route::get('products/{id}/salelines', 'ProductsController@saleLines');
+    Route::get('products/{id}/offers', 'ProductsController@offers');
 
     // Stocks
     Route::get('stocks', 'StocksController@index');
@@ -46,6 +48,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api', 'cors']], funct
     Route::post('providers', 'ProvidersController@store');
     Route::delete('providers/{id}', 'ProvidersController@delete');
     Route::get('providers/{id}/lines', 'ProvidersController@lines');
+    Route::get('providers/{id}/offers', 'ProvidersController@offers');
 
     //Customers
     Route::get('customers', 'CustomersController@index');
@@ -72,8 +75,19 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api', 'cors']], funct
 
     //SaleOrders
     Route::get('saleorders', 'SaleOrdersController@index');
+    Route::get('saleorders/{id}', 'SaleOrdersController@find');
+    Route::post('saleorders', 'SaleOrdersController@store');
+    Route::delete('saleorders/{id}', 'SaleOrdersController@delete');
+    Route::post('saleorders/{id}/open', 'SaleOrdersController@open');
+    Route::post('saleorders/{id}/close', 'SaleOrdersController@close');
+    Route::get('saleorders/{id}/lines', 'SaleOrdersController@lines');
 
     //SaleLines
+    Route::get('salelines/{id}', 'SaleLinesController@find');
+    Route::post('salelines', 'SaleLinesController@store');
+    Route::delete('salelines/{id}', 'SaleLinesController@delete');
+    Route::post('salelines/{lineId}/assign/{orderId}', 'SaleLinesController@assign');
+    Route::post('salelines/{id}/acknowledge', 'SaleLinesController@acknowledge');
 
     //Triggers
 

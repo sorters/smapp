@@ -70,13 +70,27 @@ class StocksController extends Controller
             return response("404: Product not found: $product_id", 404);
         }
 
-        $availableQuantity = $product->stock;
+        $available = $product->stock;
 
-        if ($quantity > $availableQuantity) {
-            return response("400: Bad request: Quantity to remove ($quantity) greater than Available Quantity ($availableQuantity)", 400);
+        if ($quantity > $available) {
+            return response("400: Bad request: Quantity to remove ($quantity) greater than Available Quantity ($available)", 400);
         }
 
-        $finalQuantity = $availableQuantity - $quantity;
+        $finalQuantity = $this->removeFromStock($product, $available, $quantity, $stock_id);
+
+        return \Response::json(array(
+            'product_id' => $product_id,
+            'quantity' => number_format($finalQuantity, self::DECIMALS),
+            'errors' => false,
+        ),
+            200
+        );
+
+    }
+
+    public function removeFromStock($product, $available, $quantity, $stock_id = null)
+    {
+        $finalQuantity = $available - $quantity;
 
         $remainingQuantity = $quantity;
 
@@ -123,14 +137,7 @@ class StocksController extends Controller
             }
         }
 
-        return \Response::json(array(
-            'product_id' => $product_id,
-            'quantity' => number_format($finalQuantity, self::DECIMALS),
-            'errors' => false,
-        ),
-            200
-        );
-
+        return $finalQuantity;
     }
 
 }

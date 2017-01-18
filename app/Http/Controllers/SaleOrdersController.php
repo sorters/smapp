@@ -10,70 +10,71 @@ class SaleOrdersController extends Controller
         $saleOrders = SaleOrder::all();
         return \Response::json($saleOrders);
     }
-/*
-    public function find($id) {
-        $purchaseOrder = PurchaseOrder::find($id);
 
-        if (empty($purchaseOrder)) {
-            return response("404: Purchase Order not found: $id", 404);
+    public function find($id) {
+        $saleOrder = SaleOrder::find($id);
+
+        if (empty($saleOrder)) {
+            return response("404: Sale Order not found: $id", 404);
         }
 
-        return \Response::json($purchaseOrder);
+        return \Response::json($saleOrder);
     }
 
     public function store() {
         if (\Request::has('id')) {
-            $purchaseOrder = PurchaseOrder::firstOrNew(['id' => \Request::get('id')]);
+            $saleOrder = SaleOrder::firstOrNew(['id' => \Request::get('id')]);
         } else {
-            $purchaseOrder = new PurchaseOrder();
+            $saleOrder = new SaleOrder();
         }
 
-        $purchaseOrder->comments = \Request::get('comments');
+        $saleOrder->comments = \Request::get('comments');
+        $saleOrder->customer_id = \Request::get('customer_id');
 
         try {
-            $purchaseOrder->save();
+            $saleOrder->save();
         } catch (QueryException $e) {
             return response('400: Bad request', 400);
         }
 
         return \Response::json(array(
-                'id' => $purchaseOrder->id,
-                'errors' => false,
-            ),
+            'id' => $saleOrder->id,
+            'errors' => false,
+        ),
             200
         );
     }
 
     public function delete($id) {
 
-        $purchaseOrder = PurchaseOrder::find($id);
+        $saleOrder = SaleOrder::find($id);
 
-        if (empty($purchaseOrder)) {
-            return response("404: Purchase Order not found: $id", 404);
+        if (empty($saleOrder)) {
+            return response("404: Sale Order not found: $id", 404);
         }
 
-        if ($purchaseOrder->state) {
-            return response("400: Cannot delete Purchase Order $id: State is not Closed", 400);
+        if ($saleOrder->state) {
+            return response("400: Cannot delete Sale Order $id: State is not Closed", 400);
         }
 
-        PurchaseOrder::destroy($id);
+        SaleOrder::destroy($id);
 
         return \Response::json(array(
-                'errors' => false,
-            ),
+            'errors' => false,
+        ),
             200
         );
     }
 
     public function open($id) {
-        $purchaseOrder = PurchaseOrder::find($id);
+        $saleOrder = SaleOrder::find($id);
 
-        if (empty($purchaseOrder)) {
-            return response("404: Purchase Order not found: $id", 404);
+        if (empty($saleOrder)) {
+            return response("404: Sale Order not found: $id", 404);
         }
 
-        $purchaseOrder->state = true;
-        $purchaseOrder->save();
+        $saleOrder->state = true;
+        $saleOrder->save();
 
         return \Response::json(array(
             'errors' => false,
@@ -83,20 +84,20 @@ class SaleOrdersController extends Controller
     }
 
     public function close($id) {
-        $purchaseOrder = PurchaseOrder::find($id);
+        $saleOrder = SaleOrder::find($id);
 
-        if (empty($purchaseOrder)) {
-            return response("404: Purchase Order not found: $id", 404);
+        if (empty($saleOrder)) {
+            return response("404: Sale Order not found: $id", 404);
         }
 
-        foreach($purchaseOrder->lines as $line) {
+        foreach($saleOrder->lines as $line) {
             if ($line->state) {
-                return response("400: Purchase Order $id has open Purchase Line: $line->id", 400);
+                return response("400: Sale Order $id has open Sale Line: $line->id", 400);
             }
         };
 
-        $purchaseOrder->state = false;
-        $purchaseOrder->save();
+        $saleOrder->state = false;
+        $saleOrder->save();
 
         return \Response::json(array(
             'errors' => false,
@@ -106,15 +107,15 @@ class SaleOrdersController extends Controller
     }
 
     public function lines($id) {
-        $purchaseOrder = PurchaseOrder::find($id);
+        $saleOrder = SaleOrder::find($id);
 
-        if (empty($purchaseOrder)) {
-            return response("404: Purchase Order not found: $id", 404);
+        if (empty($saleOrder)) {
+            return response("404: Sale Order not found: $id", 404);
         }
 
-        $lines = $purchaseOrder->lines;
+        $lines = $saleOrder->lines;
 
         return \Response::json($lines);
     }
-*/
+
 }

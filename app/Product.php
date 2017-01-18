@@ -41,6 +41,11 @@ class Product extends Model
         return $this->hasMany('App\SaleLine');
     }
 
+    public function offers()
+    {
+        return $this->hasMany('App\ProductOffer');
+    }
+
     public function getStockAttribute()
     {
         $quantity = 0;

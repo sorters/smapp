@@ -65,6 +65,20 @@ class ProductsCest
         $I->seeResponseContainsJson($sampleProduct);
     }
 
+    public function RetrieveInexistentProductGives404Test(ApiTester $I)
+    {
+        $fakeProductId = '9999';
+
+        $fakeSampleProduct = array('id' => $fakeProductId, 'name' => 'product1',
+            'description' => 'a test product description for 1');
+
+        $I->wantTo('Get a 404 response while attempting to retrieve an inexistent product via API');
+        $I->dontSeeInDatabase('products', $fakeSampleProduct);
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendGET('/products/'.$fakeProductId, []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::NOT_FOUND); // 404
+    }
+
     public function CreateProductTest(ApiTester $I)
     {
         $categoryId = '1';
@@ -498,7 +512,6 @@ class ProductsCest
         foreach($samplePurchaseOrders as $samplePurchaseOrder) {
             $I->haveInDatabase('purchaseorders', $samplePurchaseOrder);
         }
-        $I->haveInDatabase('purchaseorders', $samplePurchaseOrder);
         foreach($samplePurchaseLines as $samplePurchaseLine) {
             $I->haveInDatabase('purchaselines', $samplePurchaseLine);
         }
@@ -507,6 +520,102 @@ class ProductsCest
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson($samplePurchaseLines);
+    }
+
+    public function ListSaleLinesForProductTest(ApiTester $I)
+    {
+        $categoryId = '1';
+        $productId = '1';
+        $providerId1 = '1';
+        $providerId2 = '2';
+
+        $sampleCategory = array('id' => $categoryId, 'name' => 'category1', 'description' => 'a test category description for 1');
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1', 'category_id' => $categoryId,
+            'description' => 'a test product description for 1');
+
+        $sampleProviders = array(
+            array('id' => $providerId1, 'name' => 'provider1', 'description' => 'a test provider description for 1'),
+            array('id' => $providerId2, 'name' => 'provider2', 'description' => 'a test provider description for 2'),
+        );
+
+        $sampleSaleOrderId1 = '1';
+        $sampleSaleOrderId2 = '2';
+        $sampleSaleOrders = array(
+            array('id' => $sampleSaleOrderId1, 'state' => true, 'comments' => 'a test sale order comment'),
+            array('id' => $sampleSaleOrderId2, 'state' => true, 'comments' => 'a test sale order comment'),
+        );
+
+        $sampleSaleLines =array(
+            array('id' => '1',
+                'sale_order_id' => $sampleSaleOrderId1,
+                'product_id' => $productId,
+                'state' => true,
+                'units' => number_format(10, 2),
+                'unit_price' => number_format(12.0, 2)),
+            array('id' => '2',
+                'sale_order_id' => $sampleSaleOrderId2,
+                'product_id' => $productId,
+                'state' => true,
+                'units' => number_format(100, 2),
+                'unit_price' => number_format(9.0, 2))
+        );
+
+        $I->wantTo('list all the sale lines for a product via API');
+        $I->haveInDatabase('categories', $sampleCategory);
+        foreach($sampleProviders as $sampleProvider) {
+            $I->haveInDatabase('providers', $sampleProvider);
+        }
+        $I->haveInDatabase('products', $sampleProduct);
+        foreach($sampleSaleOrders as $sampleSaleOrder) {
+            $I->haveInDatabase('saleorders', $sampleSaleOrder);
+        }
+        foreach($sampleSaleLines as $sampleSaleLine) {
+            $I->haveInDatabase('salelines', $sampleSaleLine);
+        }
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendGET('/products/'.$productId.'/salelines', []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson($sampleSaleLines);
+    }
+
+    public function ListOffersForProductTest(ApiTester $I)
+    {
+        $categoryId = '1';
+        $productId = '1';
+        $providerId1 = '1';
+        $providerId2 = '2';
+
+        $sampleCategory = array('id' => $categoryId, 'name' => 'category1', 'description' => 'a test category description for 1');
+
+        $sampleProduct = array('id' => $productId, 'name' => 'product1', 'category_id' => $categoryId,
+            'description' => 'a test product description for 1');
+
+        $sampleProviders = array(
+            array('id' => $providerId1, 'name' => 'provider1', 'description' => 'a test provider description for 1'),
+            array('id' => $providerId2, 'name' => 'provider2', 'description' => 'a test provider description for 2'),
+        );
+
+        $sampleProductOffers = array(
+            array('id' => '1', 'unit_price' => number_format(9.0, 2), 'product_id' => $productId, 'provider_id' => $providerId1),
+            array('id' => '2', 'unit_price' => number_format(8.0, 2), 'product_id' => $productId, 'provider_id' => $providerId2),
+        );
+
+        $I->wantTo('list all the product offers for a product via API');
+        $I->haveInDatabase('categories', $sampleCategory);
+        foreach($sampleProviders as $sampleProvider) {
+            $I->haveInDatabase('providers', $sampleProvider);
+        }
+        $I->haveInDatabase('products', $sampleProduct);
+        foreach($sampleProductOffers as $sampleProductOffer) {
+            $I->haveInDatabase('productoffers', $sampleProductOffer);
+        }
+        $I->haveHttpHeader('Authorization', 'Bearer IsZs01MiurjFPmCHuXG9b2dO7oSOgn14ZbsYtpDANfrYuVvglgX61cq2b6sY');
+        $I->sendGET('/products/'.$productId.'/offers', []);
+        $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson($sampleProductOffers);
     }
 
 }

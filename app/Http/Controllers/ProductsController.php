@@ -210,4 +210,28 @@ class ProductsController extends Controller
         return \Response::json($lines);
     }
 
+    public function saleLines($id) {
+        $product = Product::find($id);
+
+        if (empty($product)) {
+            return response("404: Product not found: $id", 404);
+        }
+
+        $lines = $product->saleLines;
+
+        return \Response::json($lines);
+    }
+
+    public function offers($id) {
+        $product = Product::find($id);
+
+        if (empty($product)) {
+            return response("404: Product not found: $id", 404);
+        }
+
+        $offers = $product->offers;
+
+        return \Response::json($offers);
+    }
+
 }

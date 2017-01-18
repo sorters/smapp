@@ -21,4 +21,9 @@ class ProductOffer extends Model
         return $this->hasMany('App\Provider');
     }
 
+    public function getUnitPriceAttribute($value)
+    {
+        return number_format($value, 2);
+    }
+
 }

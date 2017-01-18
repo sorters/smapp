@@ -21,7 +21,7 @@ class Provider extends Model
         return $this->hasMany('App\Stock');
     }
 
-    public function productOffers()
+    public function offers()
     {
         return $this->hasMany('App\ProductOffer');
     }
