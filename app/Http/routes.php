@@ -42,7 +42,7 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api', 'cors']], funct
     Route::get('products/{idProduct}/tags', 'ProductsController@tags');
     Route::get('tags/{idTag}/products', 'TagsController@products');
 
-    //Providers
+    // Providers
     Route::get('providers', 'ProvidersController@index');
     Route::get('providers/{id}', 'ProvidersController@find');
     Route::post('providers', 'ProvidersController@store');
@@ -50,14 +50,14 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api', 'cors']], funct
     Route::get('providers/{id}/lines', 'ProvidersController@lines');
     Route::get('providers/{id}/offers', 'ProvidersController@offers');
 
-    //Customers
+    // Customers
     Route::get('customers', 'CustomersController@index');
     Route::get('customers/{id}', 'CustomersController@find');
     Route::post('customers', 'CustomersController@store');
     Route::delete('customers/{id}', 'CustomersController@delete');
     Route::get('customers/{id}/orders', 'CustomersController@orders');
 
-    //PurchaseOrders
+    // PurchaseOrders
     Route::get('purchaseorders', 'PurchaseOrdersController@index');
     Route::get('purchaseorders/{id}', 'PurchaseOrdersController@find');
     Route::post('purchaseorders', 'PurchaseOrdersController@store');
@@ -66,14 +66,14 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api', 'cors']], funct
     Route::post('purchaseorders/{id}/close', 'PurchaseOrdersController@close');
     Route::get('purchaseorders/{id}/lines', 'PurchaseOrdersController@lines');
 
-    //PurchaseLines
+    // PurchaseLines
     Route::get('purchaselines/{id}', 'PurchaseLinesController@find');
     Route::post('purchaselines', 'PurchaseLinesController@store');
     Route::delete('purchaselines/{id}', 'PurchaseLinesController@delete');
     Route::post('purchaselines/{lineId}/assign/{orderId}', 'PurchaseLinesController@assign');
     Route::post('purchaselines/{id}/acknowledge', 'PurchaseLinesController@acknowledge');
 
-    //SaleOrders
+    // SaleOrders
     Route::get('saleorders', 'SaleOrdersController@index');
     Route::get('saleorders/{id}', 'SaleOrdersController@find');
     Route::post('saleorders', 'SaleOrdersController@store');
@@ -82,14 +82,20 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api', 'cors']], funct
     Route::post('saleorders/{id}/close', 'SaleOrdersController@close');
     Route::get('saleorders/{id}/lines', 'SaleOrdersController@lines');
 
-    //SaleLines
+    // SaleLines
     Route::get('salelines/{id}', 'SaleLinesController@find');
     Route::post('salelines', 'SaleLinesController@store');
     Route::delete('salelines/{id}', 'SaleLinesController@delete');
     Route::post('salelines/{lineId}/assign/{orderId}', 'SaleLinesController@assign');
     Route::post('salelines/{id}/acknowledge', 'SaleLinesController@acknowledge');
 
-    //Triggers
+    // ProductOffers
+    Route::get('productoffers', 'ProductOffersController@index');
+    Route::post('productoffers', 'ProductOffersController@store');
+    Route::get('productoffers/{id}', 'ProductOffersController@find');
+    Route::delete('productoffers/{id}', 'ProductOffersController@delete');
+
+    // Triggers
 
 });
 
