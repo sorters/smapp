@@ -96,6 +96,34 @@ Route::group(['prefix' => 'api/v1', 'middleware' => ['auth:api', 'cors']], funct
     Route::delete('productoffers/{id}', 'ProductOffersController@delete');
 
     // Triggers
+    Route::get('triggers', 'TriggersController@index');
+    Route::post('triggers', 'TriggersController@store');
+    Route::get('triggers/{id}', 'TriggersController@find');
+    Route::delete('triggers/{id}', 'TriggersController@delete');
+    Route::post('triggers/{id}/enable', 'TriggersController@enable');
+    Route::post('triggers/{id}/disable', 'TriggersController@disable');
+
+    // Reporting
+    Route::get('reports/products', 'ProductsController@index');
+    Route::get('reports/stocks', 'StocksController@index');
+    Route::get('reports/categories', 'CategoriesController@index');
+    Route::get('reports/triggers', 'TriggersController@index');
+    Route::get('reports/providers', 'ProvidersController@index');
+    Route::get('reports/customers', 'CustomersController@index');
+    Route::get('reports/purchaseorders', 'PurchaseOrdersController@index');
+    Route::get('reports/saleorders', 'SaleOrdersController@index');
+
+    Route::get('reports/productstock/{id}', 'ProductsController@getStock');
+    Route::get('reports/productstocks/{id}', 'ProductsController@getStocks');
+    Route::get('reports/productsbycategory/{idCategory}', 'CategoriesController@products');
+    Route::get('reports/tagsforproduct/{idProduct}', 'ProductsController@tags');
+    Route::get('reports/productsbytag/{idTag}', 'TagsController@products');
+    Route::get('reports/purchaselinesfororder/{id}', 'PurchaseOrdersController@lines');
+    Route::get('reports/purchaselinesforproduct/{id}', 'ProductsController@purchaseLines');
+    Route::get('reports/linesforprovider/{id}', 'ProvidersController@lines');
+    Route::get('reports/ordersforcustomer/{id}', 'CustomersController@orders');
+    Route::get('reports/salelinesfororder/{id}', 'SaleOrdersController@lines');
+    Route::get('reports/salelinesforproduct/{id}', 'ProductsController@saleLines');
 
 });
 

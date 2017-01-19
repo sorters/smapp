@@ -1,0 +1,297 @@
+/products:
+  get:
+    description: A Report that lists all the Products. 
+
+    responses:
+      200:
+        body:
+          type: Product[]
+      401:
+        description: Unauthorized
+
+/stocks:
+  get:
+    description: A Report that lists all the Stocks.
+
+    responses:
+      200:
+        body:
+          type: Stock[]
+      401:
+        description: Unauthorized
+
+/categories:
+  get:
+    description: A Report that lists all the Categories.
+
+    responses:
+      200:
+        body:
+          type: Category[]
+      401:
+        description: Unauthorized
+
+/triggers:
+  get:
+    description: A Report that lists all the Triggers.
+
+    responses:
+      200:
+        body:
+          type: Trigger[]
+      401:
+        description: Unauthorized
+
+/providers:
+  get:
+    description: A Report that lists all the Providers.
+
+    responses:
+      200:
+        body:
+          type: Provider[]
+      401:
+        description: Unauthorized
+
+/customers:
+  get:
+    description: A Report that lists all the Customers.
+
+    responses:
+      200:
+        body:
+          type: Customer[]
+      401:
+        description: Unauthorized
+
+/purchaseorders:
+  get:
+    description: A Report that lists all the Purchase orders.
+
+    responses:
+      200:
+        body:
+          type: PurchaseOrder[]
+      401:
+        description: Unauthorized
+
+/saleorders:
+  get:
+    description: A Report that lists all the Sale orders.
+
+    responses:
+      200:
+        body:
+          type: SaleOrder[]
+      401:
+        description: Unauthorized
+
+/productstock/{id}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Product.
+      type: integer
+      example: 101
+
+  get:
+    description: A Report that shows the Stock of a Product.
+
+    responses:
+      200:
+        body:
+          type: integer
+          example: 1404
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+/productstocks/{id}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Product.
+      type: integer
+      example: 101
+
+  get:
+    description: A Report that lists all the Stocks for a Product.
+
+    responses:
+      200:
+        body:
+          type: Stock[]
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+/productsbycategory/{idCategory}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Category.
+      type: integer
+      example: 101
+
+  get:
+    description: A Report that lists all the Products in a Category.
+
+    responses:
+      200:
+        body:
+          type: Product[]
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+/tagsforproduct/{idProduct}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Product.
+      type: integer
+      example: 101
+
+  get:
+    description: A Report that lists all the Tags of a Product.
+
+    responses:
+      200:
+        body:
+          type: Tag[]
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+/productsbytag/{idTag}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Tag.
+      type: integer
+      example: 101
+
+  get:
+    description: A Report that lists all the Products under a Tag.
+
+    responses:
+      200:
+        body:
+          type: Product[]
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+/purchaselinesfororder/{id}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Purchase order.
+      type: integer
+      example: 101
+
+  get:
+    description: A Report that lists all the lines for a Purchase order.
+
+    responses:
+      200:
+        body:
+          type: PurchaseLine[]
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+/purchaselinesforproduct/{id}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Product.
+      type: integer
+      example: 101
+
+  get:
+    description:  A Report that lists all the Purchase lines for a Product.
+
+    responses:
+      200:
+        body:
+          type: PurchaseLine[]
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+/linesforprovider/{id}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Provider.
+      type: integer
+      example: 101
+
+  get:
+    description: A Report that lists all the Purchase lines for a Provider.
+
+    responses:
+      200:
+        body:
+          type: PurchaseLine[]
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+/ordersforcustomer/{id}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Customer.
+      type: integer
+      example: 101
+
+  get:
+    description:  A Report that lists all the Orders for a Customer.
+
+    responses:
+      200:
+        body:
+          type: SaleOrder[]
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+/salelinesfororder/{id}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Sale order.
+      type: integer
+      example: 101
+
+  get:
+    description: A Report that lists all the lines for a Sale order.
+
+    responses:
+      200:
+        body:
+          type: SaleLine[]
+      401:
+        description: Unauthorized
+      404:
+        description: Not found
+
+/salelinesforproduct/{id}:
+  uriParameters:
+    id:
+      description: The unique identifier for the Product.
+      type: integer
+      example: 101
+
+  get:
+    description: A Report that lists all the Sale lines of a Product.
+
+    responses:
+      200:
+        body:
+          type: SaleLine[]
+      401:
+        description: Unauthorized
+      404:
+        description: Not found

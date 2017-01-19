@@ -17,6 +17,7 @@ CREATE TABLE "productoffers" ("id" integer not null primary key autoincrement, "
 CREATE TABLE "customers" ("id" integer not null primary key autoincrement, "name" varchar not null, "description" varchar not null, "created_at" datetime null, "updated_at" datetime null);
 CREATE TABLE "saleorders" ("id" integer not null primary key autoincrement, "customer_id" integer null, "state" tinyint(1) not null default '1', "comments" varchar not null, "created_at" datetime null, "updated_at" datetime null, foreign key("customer_id") references "customers"("id"));
 CREATE TABLE "salelines" ("id" integer not null primary key autoincrement, "state" tinyint(1) not null default '1', "unit_price" float not null, "units" integer not null, "sale_order_id" integer null, "product_id" integer not null, "created_at" datetime null, "updated_at" datetime null, foreign key("sale_order_id") references "saleorders"("id"), foreign key("product_id") references "products"("id"));
+CREATE TABLE "triggers" ("id" integer not null primary key autoincrement, "threshold" integer not null, "offset" integer not null, "fill" tinyint(1) not null, "enabled" tinyint(1) not null, "product_id" integer not null, "product_offer_id" integer not null, "created_at" datetime null, "updated_at" datetime null, foreign key("product_id") references "products"("id"), foreign key("product_offer_id") references "productoffers"("id"));
 
 CREATE UNIQUE INDEX "users_email_unique" on "users" ("email");
 CREATE UNIQUE INDEX "tags_name_unique" on "tags" ("name");
