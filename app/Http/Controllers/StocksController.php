@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Product;
+use App\ProductOffer;
+use App\PurchaseLine;
+use App\PurchaseOrder;
 use App\Stock;
 use League\Flysystem\Exception;
 
@@ -137,7 +140,39 @@ class StocksController extends Controller
             }
         }
 
+        $this->checkTriggers($product, $finalQuantity);
+
         return $finalQuantity;
+    }
+
+    protected function checkTriggers($product, $quantity) {
+        $trigger = $product->trigger;
+
+        if (!empty($trigger) && $trigger->enabled) {
+            if ($quantity < $trigger->threshold) {
+
+                $productOffer = ProductOffer::find($trigger->product_offer_id);
+                $quantityToPurchase = number_format($trigger->fill ? ($trigger->threshold - $quantity) + $trigger->offset: $trigger->offset, 2);
+
+                try {
+                    $order = new PurchaseOrder();
+                    $order->comments = "Automatic Order created by Trigger $trigger->id";
+                    $order->save();
+
+                    $line = new PurchaseLine();
+                    $line->purchase_order_id = $order->id;
+                    $line->product_id = $productOffer->product_id;
+                    $line->provider_id = $productOffer->provider_id;
+                    $line->unit_price = $productOffer->unit_price;
+                    $line->units = $quantityToPurchase;
+                    $line->save();
+
+                } catch (Exception $e) {
+                    throw $e;
+                }
+
+            }
+        }
     }
 
 }

@@ -46,6 +46,11 @@ class Product extends Model
         return $this->hasMany('App\ProductOffer');
     }
 
+    public function trigger()
+    {
+        return $this->hasOne('App\Trigger');
+    }
+
     public function getStockAttribute()
     {
         $quantity = 0;
