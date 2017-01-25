@@ -2,7 +2,7 @@ appname="smapp" # MODIFY APPNAME HERE (OPTIONAL)
 
 # DO NOT MODIFY BELOW THIS LINE ########################
 
-mv smapp.conf /etc/apache2/sites-available/$appname.conf
+cp smapp.conf /etc/apache2/sites-available/$appname.conf
 
 a2ensite $appname.conf
 
@@ -24,6 +24,6 @@ sudo chmod -R ug+rwx database
 
 php artisan migrate:refresh --seed -n --force
 
-mv .env.production .env
+cp .env.production .env
 
 php artisan key:generate
