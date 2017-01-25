@@ -2,7 +2,7 @@ appname="smapp" # MODIFY APPNAME HERE (OPTIONAL)
 
 # DO NOT MODIFY BELOW THIS LINE ########################
 
-cp smapp.conf /etc/apache2/sites-available/$appname.conf
+cp installation/smapp.conf /etc/apache2/sites-available/$appname.conf
 
 a2ensite $appname.conf
 
